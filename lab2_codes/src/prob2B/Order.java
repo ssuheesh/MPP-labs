@@ -7,7 +7,7 @@ public class Order {
     private String orderNum;
     private LocalDate orderDate;
     List<OrderLine> orderLineList;
-
+    //package level
     Order(String orderNum, LocalDate orderDate) {
         this.orderNum = orderNum;
         this.orderDate = orderDate;

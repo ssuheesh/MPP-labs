@@ -5,7 +5,7 @@ public class OrderLine {
     private int quantity;
     private double price;
     private Order order;
-
+    //package level
     OrderLine(int orderLineNum, int quantity, double price) {
         this.orderLineNum = orderLineNum;
         this.quantity = quantity;
