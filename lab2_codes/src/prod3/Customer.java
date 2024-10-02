@@ -1,4 +1,4 @@
-package lab2_mpp;
+package prod3;
 
 public class Customer {
 	private String name;

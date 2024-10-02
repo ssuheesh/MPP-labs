@@ -1,4 +1,4 @@
-package lab2_mpp;
+package prod3;
 
 import java.util.ArrayList;
 import java.util.List;

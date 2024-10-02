@@ -1,6 +1,8 @@
-package lab2_mpp;
+import prod3.Customer;
+import prod3.LoyaltyCard;
+import prod3.Purchase;
 
-public class Main {
+public class Main3 {
 
 	public static void main(String[] args) {
 		Customer c1 = new Customer("Luna");
