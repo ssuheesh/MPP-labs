@@ -1,4 +1,4 @@
-package prod3;
+package prob3;
 
 public class Purchase {
 	private int id;

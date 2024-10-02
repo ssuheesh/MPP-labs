@@ -1,4 +1,4 @@
-package prod3;
+package prob3;
 
 import java.util.ArrayList;
 import java.util.List;

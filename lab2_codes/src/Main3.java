@@ -1,6 +1,6 @@
-import prod3.Customer;
-import prod3.LoyaltyCard;
-import prod3.Purchase;
+import prob3.Customer;
+import prob3.LoyaltyCard;
+import prob3.Purchase;
 
 public class Main3 {
 
