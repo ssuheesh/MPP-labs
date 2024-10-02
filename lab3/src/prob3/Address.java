@@ -2,48 +2,48 @@ package prob3;
 
 
 public class Address {
-	private String street;
-	private String city;
-	private String state;
-	private String zip;
-	
-	public Address(String str, String c, String state, String zip) {
-		street=str;
-		city=c;
-		this.state=state;
-		this.zip=zip;
-	}
-	
-	public String getStreet() {
-		return street;
-	}
+    private String street;
+    private String city;
+    private String state;
+    private String zip;
 
-	public void setStreet(String street) {
-		this.street = street;
-	}
+    public Address(String str, String c, String state, String zip) {
+        street = str;
+        city = c;
+        this.state = state;
+        this.zip = zip;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public String getStreet() {
+        return street;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public void setStreet(String street) {
+        this.street = street;
+    }
 
-	public String getState() {
-		return state;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	public String getZip() {
-		return zip;
-	}
+    public String getState() {
+        return state;
+    }
 
-	public void setZip(String zip) {
-		this.zip = zip;
-	}
-	
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
 }
