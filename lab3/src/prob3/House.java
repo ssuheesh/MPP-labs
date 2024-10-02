@@ -1,4 +1,4 @@
-package lab3_mpp;
+package prob3;
 
 public class House extends Property {
 	private double lotSize;

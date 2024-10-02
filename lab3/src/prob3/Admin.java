@@ -1,4 +1,4 @@
-package lab3_mpp;
+package prob3;
 
 public class Admin {
 	public static double computeTotalRent(Property[] properties) {

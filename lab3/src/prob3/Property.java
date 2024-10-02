@@ -1,4 +1,4 @@
-package lab3_mpp;
+package prob3;
 
 public abstract class Property {
 	private Address address;
