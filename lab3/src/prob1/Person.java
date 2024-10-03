@@ -3,8 +3,7 @@ package prob1;
 public class Person {
 
 	private String name;
-	private PersonWithJob pj; // PersonWithJob as in composition
-
+	 
 	Person(String n) {
 		name = n;
 	}
@@ -12,18 +11,7 @@ public class Person {
 	public String getName() {
 		return name;
 	}
-
-	public double getSalary() {
-		if (pj == null)
-			pj = new PersonWithJob();// to call default constructor, so it will not call again Person constructor
-		return pj.getSalary(); // to access the methods under PersonWithJob
-	}
-
-	public void setSalary(double salary) {
-		if (pj == null)
-			pj = new PersonWithJob();// to call default constructor, so it will not call again Person constructor
-		pj.setSalary(salary); // to access the methods under PersonWithJob
-	}
+ 
 
 	@Override
 	public boolean equals(Object aPerson) {

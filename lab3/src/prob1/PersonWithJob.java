@@ -12,19 +12,14 @@ public class PersonWithJob {
 	PersonWithJob(String n, double s) {
 		person = new Person(n); // it is also create Person
 		salary = s;
-	}
-
-	PersonWithJob() {
-
-	}
-
+	} 
 	public String getName() {
 		return person.getName(); /* to access the methods under Person */
 	}
 
-	public void setSalary(double salary) {
-		this.salary = salary;
-	}
+	//public void setSalary(double salary) {
+	//	this.salary = salary;
+	//}
 
 	@Override
 	public boolean equals(Object aPersonWithJob) {
@@ -34,8 +29,9 @@ public class PersonWithJob {
 
 		if (aPersonWithJob instanceof Person) {
 			Person p = (Person) aPersonWithJob;
-			p.setSalary(30000);
-			return this.getName().equals(p.getName()) && this.getSalary() == p.getSalary();
+			//PersonWithJob pj = new PersonWithJob(p.getName(),0.00);
+			//pj.setSalary(30000);
+			return this.getName().equals(p.getName());
 		}
 		else if(aPersonWithJob instanceof PersonWithJob)
 		{
