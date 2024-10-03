@@ -21,7 +21,7 @@ public class PersonWithJob {
 	//	this.salary = salary;
 	//}
 
-	@Override
+	//@Override
 	public boolean equals(Object aPersonWithJob) {
 		if (aPersonWithJob == null)
 			return false;

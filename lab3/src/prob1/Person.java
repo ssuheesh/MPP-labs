@@ -13,7 +13,7 @@ public class Person {
 	}
  
 
-	@Override
+	//@Override
 	public boolean equals(Object aPerson) {
 		if (aPerson == null)
 			return false;
@@ -30,8 +30,6 @@ public class Person {
 		return isEqual;
 	}
 
-	public static void main(String[] args) {
-
-	}
+	 
 
 }
