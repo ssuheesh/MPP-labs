@@ -1,0 +1,42 @@
+1. Prob B is wrong because equals method is not exactly overriden from Object class.
+    Method signature is wrong, so when you use equals to remove duplicates it works from Object class not the equals method written
+    inside Employee.java. To make it correct, in Employee class, the equals method signature should be following:
+
+        public boolean equals(Object e) {
+            if(e instanceof Employee) {
+                Employee e1 = (Employee) e;
+                return e1.name.equals(name) && e1.salary == salary;
+            }
+            else return false;
+        }
+
+    Also, since argument is Object type, we need to downcast to Employee to check equal of name and salary.
+
+2. Part C is using HashMap to remove duplicates because HashMap key cannot be same. However, if the hashCode function is
+    implemented incorrect, HashMap thinks the same valued objects different, so we need to override the hashcode method
+    on our custom class. In this case the custom class is Employee class. Also, when override hashCode function it should
+    work like equal function, which means if equals method returns true if we compare two objects, hashCode also must return
+    same value, and if equals method returns false, hashCode also must return different value. In the following is my way of
+    correct implementation:
+        name is String and hashCode of String by default works fine, so we use default hashCode of string to get int value
+        and add just salary.
+
+    @Override
+    public int hashCode() {
+        return name.hashCode() + salary;
+    }
+
+3. In Part D, like Part C, it is trying to remove duplicates by using HashMap because HashMap key cannot be same.
+    However, in the equals and hashcode overriden methods there is extra visited value is checked. So, if I have two objects
+    with same values, in the for loop, setting visited to true will make the two objects different to each other.
+    So we can remove the visited extra field check on both equals and hashcode functions. We need to remove visited check from
+    both of the overriden methods as I have written on above.
+
+    On hashCode method:
+        // result += 31 * result + (visited ? 1 : 0);  //this line commented
+
+    On equals method:
+        return emp.name.equals(name) && emp.salary == salary && emp.visited == visited;
+
+        this line becomes after visited check omittedd:
+            return emp.name.equals(name) && emp.salary == salary
