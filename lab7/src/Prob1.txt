@@ -30,7 +30,8 @@
     However, in the equals and hashcode overriden methods there is extra visited value is checked. So, if I have two objects
     with same values, in the for loop, setting visited to true will make the two objects different to each other.
     So we can remove the visited extra field check on both equals and hashcode functions. We need to remove visited check from
-    both of the overriden methods as I have written on above.
+    both of the overriden methods as I have written on above, or we instead of removing we can make Employee class immutable
+    by removing setVisited function.
 
     On hashCode method:
         // result += 31 * result + (visited ? 1 : 0);  //this line commented
