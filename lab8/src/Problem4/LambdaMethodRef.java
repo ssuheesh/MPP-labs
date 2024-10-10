@@ -1,10 +1,8 @@
-package Problem2;
+package Problem4;
 
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
 
 public class LambdaMethodRef {
 
