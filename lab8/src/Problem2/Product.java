@@ -1,6 +1,5 @@
 package Problem2;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -8,7 +7,7 @@ public class Product {
 	final String title;
 	final double price;
 	final int model;
-	enum SortMethod {BYTITLE, BYPRICE};
+	public enum SortMethod {BYTITLE, BYPRICE}
 
 	public static void mySort(List<Product> productList, SortMethod method){
 		//Local inner class
@@ -23,7 +22,7 @@ public class Product {
 				}
 			}
 		}
-		Collections.sort(productList, new MyComparator());
+		productList.sort(new MyComparator());
 	}
 	public String getTitle() {
 		return title;
