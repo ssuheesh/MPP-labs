@@ -17,8 +17,8 @@ public class Problem1 {
 	public long countWords(List<String> words, char c, char d, int len) {
 
 		return words.stream()
-				.filter(x -> x.indexOf(c) != -1)
-				.filter(x -> x.indexOf(d) == -1)
+				.filter(x -> x.contains("" + c))
+				.filter(x -> !x.contains("" + d))
 				.filter(x -> x.length() == len)
 				.count();
 	}
