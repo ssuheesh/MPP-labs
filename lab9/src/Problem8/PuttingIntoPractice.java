@@ -4,7 +4,8 @@ package Problem8;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional; 
+import java.util.Optional;
+import java.util.stream.Collectors; 
 
 public class PuttingIntoPractice {
 	public static void main(String... args) {
@@ -46,8 +47,10 @@ public class PuttingIntoPractice {
 
 		// Query 6: Update all transactions so that the traders from Milan are set to
 		// Cambridge.
-		
-		/*??????*/	
+		Arrays.asList(raoul, mario, alan, brian).stream().filter(x->x.getCity().equals("Milan")).forEach(x->x.setCity("Cambridge"));
+		System.out.println("all the unique cities where the traders work");
+		Arrays.asList(raoul, mario, alan, brian).stream().map(Trader::getCity).distinct().forEach(System.out::println);
+	 
 
 		// Query 7: What's the highest value in all the transactions?
 
