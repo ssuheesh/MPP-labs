@@ -20,9 +20,19 @@ public class Main {
 		meat.ifPresentOrElse(System.out::println,()-> System.out.print("No found"));
 		
 		/*e. calculateTotalCalories() in the menu using reduce. (return int)*/
-		
+		System.out.println(calculateTotalCalories(Dish.menu));
 		/*f. calculateTotalCaloriesMethodReference()in the menu using MethodReferences. (return int)*/
+		System.out.println(calculateTotalCaloriesMethodReference(Dish.menu));
 		
+	}
+
+	public static int calculateTotalCalories(List<Dish> menu) {
+		return menu.stream().map(x -> x.getCalories()).reduce(0, Integer::sum);
+	}
+
+	public static int calculateTotalCaloriesMethodReference(List<Dish> menu){
+//		return menu.stream().mapToInt(Dish::getCalories).sum();
+		return menu.stream().map(Dish::getCalories).reduce(0, Integer::sum);
 	}
 
 }

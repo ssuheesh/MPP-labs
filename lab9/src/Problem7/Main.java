@@ -15,7 +15,7 @@ public class Main {
 		// your stream pipeline here
 
 		/* a */
-		System.out.println(list.stream() 
+		System.out.println(list.stream()
 				.sorted(Comparator.comparing(Employee::getFirstName))
 				.filter(x -> x.getSalary() > 100000)
 				.filter(x -> x.getLastName().charAt(0) >= 'N')
@@ -24,6 +24,7 @@ public class Main {
 				.collect(Collectors.joining(", ")));
 		
 		/* b. */
+		System.out.println(LambdaLibrary.Q1.apply(list));
 
 	}
 
