@@ -54,7 +54,7 @@ public class Main {
 		}
 		return false;
 	}
-
+	/*
 	public static <T> boolean containsTarget(Collection<T> list, T s) {
 		//could return list.contains(s), but this does not generalize
 		if(list == null && s == null) return false;
@@ -62,6 +62,18 @@ public class Main {
 			if(x.equals(s)) return true;
 		}
 		return false;
-	}
+	}/*
       /* Implement here the Generic method as per the requirement. Use the method name as containsTarget()*/
+	public static <T> boolean containsTarget(Collection<T> list, T s) {
+		// could return list.contains(s), but this does not generalize
+		if (list == null && s == null)
+			return false;
+ 
+		long count = list.stream().filter(x->x.equals(s)).count();
+		if(count>0) return true;
+		return false;
+		
+		//Optional<T> t = list.stream().filter(x->x.equals(s)).findAny();
+		//return t.isPresent();	
+}
 }

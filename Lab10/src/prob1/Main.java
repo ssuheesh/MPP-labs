@@ -2,6 +2,7 @@ package prob1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Main {
@@ -42,25 +43,13 @@ public class Main {
 
     public static <E extends Comparable<? super E>> List<E> mergeSortedLists(List<E> list1, List<E> list2) {
         List<E> list = new ArrayList<>();
-        int idx1 = 0;
-        int idx2 = 0;
-        while(idx1 < list1.size() && idx2 < list2.size()) {
-            if(list1.get(idx1).compareTo(list2.get(idx2)) <= 0) {
-                list.add(list1.get(idx1));
-                idx1++;
-            } else {
-                list.add(list2.get(idx2));
-                idx2++;
-            }
-        }
-        while(idx1 < list1.size()) {
-            list.add(list1.get(idx1));
-            idx1++;
-        }
-        while(idx2 < list2.size()) {
-            list.add(list2.get(idx2));
-            idx2++;
-        }
+        
+        list.addAll(list1);
+        list.addAll(list2);
+        
+		Collections.sort(list);
+        
+       
         return list;
     }
 }
