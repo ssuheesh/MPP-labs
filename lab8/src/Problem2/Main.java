@@ -3,6 +3,9 @@ package Problem2;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -36,5 +39,15 @@ public class Main {
             }
         });
         System.out.println(products);
+        TreeMap<Product, Integer> map = new TreeMap<>(new PriceComparator());
+
+        Stream.of("Bob", "Hello", "My", "Friend")
+                .reduce((x,y) -> x + " "  + y).ifPresent(System.out::println);
+
+        String res = Stream.of(1, 2,3,4,5,6,7,8,9).map(Object::toString).collect(Collectors.joining("\n"));
+        System.out.println(res);
+        Stream<String> a= Stream.of("Bob", "Hello", "My", "Friend");
+
+
     }
 }
