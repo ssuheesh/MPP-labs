@@ -1,5 +1,7 @@
 package prob2;
 
+import java.util.Objects;
+
 public class Account {
 	private int acctId;
 	private double balance;
@@ -23,5 +25,9 @@ public class Account {
 		Account other = (Account) obj;
 		return acctId == other.getAcctId() && balance == other.getBalance();
 	}
-	 
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(acctId, balance);
+	}
 }

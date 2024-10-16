@@ -1,5 +1,7 @@
 package prob2;
 
+import java.util.Objects;
+
 public class Employee extends Person {
 	int id;
 	int salary;
@@ -47,6 +49,10 @@ public class Employee extends Person {
 		if(emp.getName().equals(this.getName()) && emp.getSalary() == this.getSalary()) return true;
 		return false;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getName(), getSalary());
+	}
 }
 
