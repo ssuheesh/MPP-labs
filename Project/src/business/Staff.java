@@ -23,7 +23,7 @@ public class Staff {
 		this.joinDate=joinDate;
 		this.contactNumber=contactNumber; 
 	}
-
+ 
 
 	// Getter and Setter for staffId
     public Integer getStaffId() {
@@ -68,6 +68,15 @@ public class Staff {
 
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
+    }
+    
+    public String toString() {
+        return "Staff{" +
+                "staffId=" + staffId +
+                ", name='" + name + '\'' +
+                ", role=" + role +
+                ", joinDate=" + joinDate +
+                ", contactNumber='" + contactNumber + '\'' ;
     }
 	
 }
