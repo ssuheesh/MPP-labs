@@ -2,13 +2,21 @@ package dataaccess;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 
 public class DataAccessSystem implements DataAccess {
 	//package level access
 	DataAccessSystem() {}
+
+	public Connection getConnection() throws SQLException {
+		return new ConnectManager().getConnection();
+	}
 	public void read(Dao dao) throws SQLException {
 		String query = dao.getSql();
 		Connection con = null;
@@ -21,13 +29,13 @@ public class DataAccessSystem implements DataAccess {
 			ResultSet rs = stmt.executeQuery(query);
 			dao.unpackResultSet(rs);
 		} finally {
-			if(con != null) {
-				try {
-				 con.close();
-				} catch(Exception e) {
-					//do nothing
-				}
-			}
+//			if(con != null) {
+//				try {
+//				 con.close();
+//				} catch(Exception e) {
+//					//do nothing
+//				}
+//			}
 		}
 	}
 	
@@ -41,6 +49,7 @@ public class DataAccessSystem implements DataAccess {
 				+ "	name text NOT NULL"
 				+ ");";
 
+
 		Connection con = null;
 		try {
 			con = (new ConnectManager()).getConnection();
@@ -52,13 +61,6 @@ public class DataAccessSystem implements DataAccess {
 			System.out.println(isSuccess);
 //			dao.unpackResultSet(rs);
 		} finally {
-			if(con != null) {
-				try {
-					con.close();
-				} catch(Exception e) {
-					//do nothing
-				}
-			}
 		}
 	}
 	
@@ -83,6 +85,7 @@ public class DataAccessSystem implements DataAccess {
 	            }
 
 	            String dburl = properties.getProperty("db.url");
+//				String dburl = "jdbc:sqlite:hospital.sqlite";
 	            if (dburl != null) {
 	                // Create a connection to the database
 	                conn = DriverManager.getConnection(dburl);

@@ -14,4 +14,12 @@ public class Admin {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
