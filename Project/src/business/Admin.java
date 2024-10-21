@@ -14,12 +14,4 @@ public class Admin {
     public String getName() {
         return name;
     }
-<<<<<<< HEAD
-=======
-
-    @Override
-    public String toString() {
-        return this.name + " " + this.id;
-    }
->>>>>>> e8068d26905497c461075f51157d8e57e452821b
 }
