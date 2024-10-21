@@ -1,24 +1,28 @@
 package business;
-
-import dataaccess.DataAccess;
-import dataaccess.DataAccessFactory;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-
-import dataaccess.Dao;
-
+import Enum.AppointmentStatus;
 public class MainTest {
 
 	public static void main(String[] args) {
 
+		//Appointment a = new Appointment();
+		//a.viewAppointmentByPatient("1").stream()
+		//.forEach(System.out::println);
+
+
+		//Patient p = new Patient("1");
+		//System.out.println("Patient Appointment");
+		//p.retrieveAppointmentList().stream().forEach(System.out::println);
+
+		Appointment a = new Appointment(2);
+		a.updateAppointment(AppointmentStatus.CANCEL);
+
+/*
 		DataAccess dataAccess = DataAccessFactory.getDataAccess();
 		Dao dao = new AdminDAO();
 		Connection con = null;
 		try {
-			dataAccess.createTables(dao);
 			con = dataAccess.getConnection();
+			dataAccess.createTables(dao);
 			dataAccess.read(dao);
 			dataAccess.read(dao);
 			List<Admin> results = (List<Admin>) dao.getResults();
@@ -36,6 +40,6 @@ public class MainTest {
 				}
 			}
         }
-
+*/
 	}
 }

@@ -22,9 +22,9 @@ public class DataAccessSystem implements DataAccess {
 		Connection con = null;
 		try {
 			con = (new ConnectManager()).getConnection();
-			
+
 			Statement stmt = con.createStatement();
-			
+
 			System.out.println("the query: "+ query);
 			ResultSet rs = stmt.executeQuery(query);
 			dao.unpackResultSet(rs);
@@ -40,7 +40,16 @@ public class DataAccessSystem implements DataAccess {
 	}
 	
 	public void write(Dao dao) throws SQLException {
-		//same idea
+		String query = dao.getSql();
+		Connection con = null;
+		boolean writeFlag=false;
+		try {
+			con = (new ConnectManager()).getConnection();
+
+			Statement stmt = con.createStatement();
+			writeFlag =  stmt.execute(query);
+		}
+		finally {}
 	}
 
 	public void createTables(Dao dao) throws SQLException {
@@ -84,9 +93,11 @@ public class DataAccessSystem implements DataAccess {
 	                return null;
 	            }
 
-	            String dburl = properties.getProperty("db.url");
-//				String dburl = "jdbc:sqlite:hospital.sqlite";
-	            if (dburl != null) {
+	            //String dburl = properties.getProperty("db.url");
+ 				String dburl = "jdbc:sqlite:hospital.sqlite";
+				//String dburl = "jdbc:sqlite:C:\\Users\\zaimy\\OneDrive\\Documents\\Git\\MPP2\\hospital.sqlite";
+
+				if (dburl != null) {
 	                // Create a connection to the database
 	                conn = DriverManager.getConnection(dburl);
 	                System.out.println("Connection to SQLite has been established.");
