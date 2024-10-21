@@ -4,7 +4,11 @@ import dataaccess.Dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
+
+import Enum.Role;
+import Enum.Specialist;
 
 public class StaffDAO implements Dao {
 
@@ -15,11 +19,12 @@ public class StaffDAO implements Dao {
 		return allStaff;
 	}
 
-	public StaffDAO(){}
+	public StaffDAO() {
+	}
 
-	 public void setStaff(Staff p) {
-	        staff = p;
-	    }
+	public void setStaff(Staff p) {
+		staff = p;
+	}
 
 	@Override
 	public String getSql() {
@@ -29,8 +34,25 @@ public class StaffDAO implements Dao {
 	@Override
 	public void unpackResultSet(ResultSet rs) throws SQLException {
 		allStaff = new ArrayList<>();
-		while (rs.next()) {
-		//.add(new Staff(rs.getString("id"), rs.getString("name")));
+		while (rs.next()) { 
+			
+			int staffId = rs.getInt("staffId");
+			String name = rs.getString("name");
+			Role role = Role.valueOf(rs.getString("role"));
+			String contactNumber = rs.getString("contactNumber");
+			LocalDate joinDate = LocalDate.parse(rs.getString("joinDate"));
+			String specialistStr = rs.getString("specialist");
+
+		
+			if (specialistStr != null && !specialistStr.isEmpty()) {
+				Specialist specialist = Specialist.valueOf(specialistStr);
+				Doctor doctor = new Doctor(staffId,name, role, joinDate, contactNumber, specialist);
+				staff = doctor;
+			} else {
+				staff = new Staff(staffId,name, role, joinDate, contactNumber);
+			} 
+
+			allStaff.add(staff);
 		}
 	}
 
