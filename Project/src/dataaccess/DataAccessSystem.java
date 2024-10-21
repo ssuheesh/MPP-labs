@@ -34,7 +34,33 @@ public class DataAccessSystem implements DataAccess {
 	public void write(Dao dao) throws SQLException {
 		//same idea
 	}
-	
+
+	public void createTables(Dao dao) throws SQLException {
+		var createAdminSql = "CREATE TABLE IF NOT EXISTS ADMIN ("
+				+ "	id text PRIMARY KEY,"
+				+ "	name text NOT NULL"
+				+ ");";
+
+		Connection con = null;
+		try {
+			con = (new ConnectManager()).getConnection();
+
+			Statement stmt = con.createStatement();
+
+			System.out.println("the query: "+ createAdminSql);
+			Boolean isSuccess = stmt.execute(createAdminSql);
+			System.out.println(isSuccess);
+//			dao.unpackResultSet(rs);
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch(Exception e) {
+					//do nothing
+				}
+			}
+		}
+	}
 	
 	
 	public static class ConnectManager {
