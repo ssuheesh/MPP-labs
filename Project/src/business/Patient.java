@@ -3,8 +3,13 @@ package business;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Patient {
+    public Patient(String patientId) {
+        this.patientId=patientId;
+    }
+
     public static enum GenderType {FEMALE, MALE};
     private String patientId;
     private String patientFirstName;
@@ -15,7 +20,7 @@ public class Patient {
     private GenderType gender;
     private List<PatientHistory> patientHistoryList;
     private List<Appointment> appointmentList;
-    public Patient(String patientId, String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, GenderType gender) {
+    public Patient(String patientId, String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, GenderType gender, String address) {
         this.patientId = patientId;
         this.patientFirstName = patientFirstName;
         this.patientLastName = patientLastName;
@@ -24,6 +29,7 @@ public class Patient {
         this.gender = gender;
         this.patientHistoryList = new ArrayList<>();
         this.appointmentList = new ArrayList<>();
+        this.address = address;
     }
 
     public String getPatientId() {
@@ -79,11 +85,28 @@ public class Patient {
         patientHistoryList.add(patientHistory);
     }
     public List<Appointment> retrieveAppointmentList() {
+        appointmentList = Appointment.viewAppointmentByPatient(this.getPatientId())
+                .stream().filter(x -> x.getDate().isAfter(LocalDate.now()))
+                .collect(Collectors.toList());
         return appointmentList;
     }
+
     public void addAppointmentList(Appointment appointment) {
         appointmentList.add(appointment);
     }
 
+    @Override
+    public String toString() {
+        return
+                "patientId='" + patientId + '\'' +
+                ", firstName='" + patientFirstName + '\'' +
+                ", lastName='" + patientLastName + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", birthDate=" + birthDate +
+                ", gender=" + gender +
+                ", patientHistoryList=" + patientHistoryList +
+                ", appointmentList=" + appointmentList;
+    }
 }
 
