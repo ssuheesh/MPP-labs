@@ -18,6 +18,7 @@ public class PatientDAO implements Dao {
     private Patient currentPatient;
     private String queryString;
     private String insertUpdateQueryString;
+
     @Override
     public String getSql() {
         return queryString;
@@ -34,23 +35,23 @@ public class PatientDAO implements Dao {
     public void setQueryString(String queryString) {
         this.queryString = queryString;
     }
+
     public void setInsertUpdateQueryString(String insertUpdateQueryString) {
         this.insertUpdateQueryString = insertUpdateQueryString;
     }
 
 
-
     @Override
     public void unpackResultSet(ResultSet rs) throws SQLException {
         patients = new ArrayList<>();
-
         while (rs.next()) {
             String patientId = rs.getString("patientId");
             String firstName = rs.getString("firstName");
             String lastName = rs.getString("lastName");
             String contactNumber = rs.getString("contactNumber");
             String address = rs.getString("address");
-            LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
+            String birthDateString = rs.getString("birthDate");
+            LocalDate birthDate = (birthDateString != null) ? LocalDate.parse(birthDateString) : null;
             Patient.GenderType gender = Patient.GenderType.valueOf(rs.getString("gender").toUpperCase());
 
             Patient patient = new Patient(patientId, firstName, lastName, contactNumber, birthDate, gender, address);
@@ -79,8 +80,7 @@ public class PatientDAO implements Dao {
             String formattedDate = currentPatient.getBirthDate().toString();
             pstmt.setString(6, formattedDate);
             pstmt.setString(7, currentPatient.getGender().name());
-        }
-        else if (pstmt.toString().toUpperCase().startsWith("UPDATE")) {
+        } else if (pstmt.toString().toUpperCase().startsWith("UPDATE")) {
             pstmt.setString(1, currentPatient.getPatientFirstName());
             pstmt.setString(2, currentPatient.getPatientLastName());
             pstmt.setString(3, currentPatient.getContactNumber());
@@ -92,9 +92,9 @@ public class PatientDAO implements Dao {
 
     }
 
-    public boolean addPatient(Patient patient){
+    public boolean addPatient(Patient patient) {
         boolean flag = false;
-        try{
+        try {
             this.currentPatient = patient;
             DataAccess dataAccess = DataAccessFactory.getDataAccess();
             String uniquePatientId = UUID.randomUUID().toString();
@@ -135,14 +135,16 @@ public class PatientDAO implements Dao {
 
         return results;
     }
-    public Patient getPatientById(int patientId) {
+
+    public Patient getPatientById(String patientId) {
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
         Patient results = null;
 
         try {
-            this.setQueryString("SELECT * from PATIENT WHERE patientId = " + patientId);
+            this.setQueryString("SELECT * FROM PATIENT WHERE patientId = '" + patientId + "'");
             dataAccess.read(this);
-            results = patients.getFirst();
+            if (patients != null && !patients.isEmpty())
+                results = patients.getFirst();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -151,7 +153,9 @@ public class PatientDAO implements Dao {
 
         return results;
     }
-    public void updatePatient(Patient patient) throws SQLException {
+
+    public boolean updatePatient(Patient patient) {
+        boolean flag = false;
         try {
             this.currentPatient = patient;
             DataAccess dataAccess = DataAccessFactory.getDataAccess();
@@ -159,10 +163,11 @@ public class PatientDAO implements Dao {
             this.setInsertUpdateQueryString("UPDATE PATIENT SET firstName = ?, lastName = ?, contactNumber = ?, address = ?, birthDate = ?, gender = ? WHERE patientId = ?");
 
             dataAccess.write(this);
+            flag = true;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e;
         }
+        return flag;
     }
 
 }

@@ -52,9 +52,12 @@ public class AppointmentDao implements Dao {
             AppointmentStatus status = AppointmentStatus.valueOf(rs.getString("status"));
             //here to get patient
             String patientId = rs.getString("patient");
-            Patient patient = new Patient(patientId);
-
-            Appointment appointment = new Appointment(appointmentId, date, slotOfTheDay, visitReason, status,patient);
+            Patient patient = null;
+            if (patientId != null) {
+                PatientDAO patientDAO = new PatientDAO();
+                patient = patientDAO.getPatientById(patientId);
+            }
+            Appointment appointment = new Appointment(appointmentId, date, slotOfTheDay, visitReason, status, patient);
             appointments.add(appointment);
 
         }
@@ -78,6 +81,7 @@ public class AppointmentDao implements Dao {
             pstmt.setString(3, currentAppointment.getVisitReason() != null ? currentAppointment.getVisitReason() : null);
             pstmt.setString(4, currentAppointment.getStatus().toString() != null ? currentAppointment.getStatus().toString() : null);
             pstmt.setString(5, currentAppointment.getPatient() != null && currentAppointment.getPatient().getPatientId() != null ? currentAppointment.getPatient().getPatientId() : null);
+            pstmt.setString(6, currentAppointment.getDoctorSchedule() != null && currentAppointment.getDoctorSchedule().getId() != null ? currentAppointment.getDoctorSchedule().getId() : null);
         }
         if (pstmt.toString().toUpperCase().startsWith("UPDATE")) {
             pstmt.setString(1, currentAppointment.getStatus().toString() != null ? currentAppointment.getStatus().toString() : null);
@@ -140,7 +144,8 @@ public class AppointmentDao implements Dao {
         try {
             this.setQueryString("SELECT * from APPOINTMENT WHERE appointmentid = '" + appointmentId + "'");
             dataAccess.read(this);
-            results = appointments.getFirst();
+            if (appointments != null && appointments.size() > 0)
+                results = appointments.getFirst();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -180,9 +185,9 @@ public class AppointmentDao implements Dao {
         try {
             this.currentAppointment = appointment;
             this.setInsertUpdateQueryStringQueryString("INSERT INTO APPOINTMENT" +
-                    "(date,slotOfTheDay,visitReason,status,patient)" +
+                    "(date,slotOfTheDay,visitReason,status,patient,doctorschedule)" +
                     " VALUES " +
-                    "(?,?,?,?,?)");
+                    "(?,?,?,?,?,?)");
             dataAccess.write(this);
             flag = true;
 

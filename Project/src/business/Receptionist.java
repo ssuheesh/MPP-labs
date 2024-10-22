@@ -4,16 +4,27 @@ import Enum.AppointmentStatus;
 import Enum.Specialist;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Receptionist {
 
     public static boolean bookAppointment(Appointment appointment) {
         /*Schedule Appointment */
-
-        return Appointment.bookAppointment(appointment);
+        if (appointment != null) {
+            if (Appointment.bookAppointment(appointment)) {
+                Optional<Appointment> insertedAppointment = Appointment.viewAllAppointment().stream().sorted(Comparator.comparing(Appointment::getAppointmentId).reversed()).findFirst();
+                if (insertedAppointment.isPresent()) {
+                    DoctorSchedule doctorSchedule = appointment.getDoctorSchedule();
+                    doctorSchedule.setAppointment(insertedAppointment.get());
+                    DoctorScheduleDAO doctorScheduleDAO = new DoctorScheduleDAO();
+                    doctorScheduleDAO.updateDoctorSchedule(doctorSchedule);
+                }
+                System.out.println("Appointment booked");
+                return true;
+            }
+        }
+        return false;
     }
 
     public static List<Appointment> viewAppointment() {
@@ -60,10 +71,18 @@ public class Receptionist {
         if (specialist != null) {
 
             //get all doctors by specialist
+            DoctorScheduleDAO doctorScheduleDAO = new DoctorScheduleDAO();
+            Specialist finalSpecialist = specialist;
 
-            //get all schedules by doctor
-
-
+            System.out.println("Available schedule for " + specialist.toString() + " are here.");
+            doctorScheduleDAO.retrieveAllDoctorSchedule().stream()
+                     .filter(x -> x.getDoctor().getSpecialist().equals(finalSpecialist))
+                    .filter(x -> !x.getAvailableDay().isBefore(LocalDate.now()))
+                    //.filter(x -> x.getAppointment() == null)
+                    .sorted(Comparator.comparing(DoctorSchedule::getAvailableDay)
+                            .thenComparing(DoctorSchedule::getSlotNumber)
+                            .thenComparing(DoctorSchedule::getSlotNumber))
+                    .forEach(System.out::println);
         }
 
         scanner.close();
@@ -80,35 +99,56 @@ public class Receptionist {
         Scanner scanner = new Scanner(System.in);
         String str = "";
         Appointment appointment = new Appointment();
-
-        System.out.println("Enter the date YYYY-MM-DD :");
+        System.out.println("Enter the patient Id");
         str = scanner.nextLine();
-        appointment.setDate(LocalDate.parse(str));
 
-        System.out.println("Enter the slot of the day:");
+
+        if (str.isBlank()) {
+            System.out.println("Patient Id is blank");
+            return null;
+        } else {
+            // here to get the patient and validate it
+            System.out.println("Patient Id : " + str);
+
+            PatientDAO patientDAO = new PatientDAO();
+
+            Patient patient = patientDAO.getPatientById(str);
+            if (patient != null) {
+                appointment.setPatient(patient);
+            } else {
+                System.out.println("Patient is not found");
+                return null;
+            }
+        }
+        System.out.println("Enter the doctor schedule Id.");
         str = scanner.nextLine();
-        appointment.setSlotOfTheDay(Integer.parseInt(str));
-
+        if (str.isBlank()) {
+            System.out.println("Doctor schedule Id is blank.");
+            return null;
+        } else {
+            // here to get the doctor schedule and validate it
+            System.out.println("Doctor schedule Id : " + str);
+            DoctorScheduleDAO doctorScheduleDAO = new DoctorScheduleDAO();
+            DoctorSchedule doctorSchedule = doctorScheduleDAO.getDoctorScheduleById(str);
+            if (doctorSchedule != null) {
+                if (doctorSchedule.isAvailable()) {
+                    appointment.setDoctorSchedule(doctorSchedule);
+                    appointment.setDate(doctorSchedule.getAvailableDay());
+                    appointment.setSlotOfTheDay(doctorSchedule.getSlotNumber());
+                } else {
+                    System.out.println("The slot is not available.");
+                    return null;
+                }
+            } else {
+                System.out.println("Doctor schedule is not found.");
+                return null;
+            }
+        }
         System.out.println("Enter the visit reason");
         str = scanner.nextLine();
         appointment.setVisitReason(str);
 
         appointment.setStatus(AppointmentStatus.BOOKED);
-
-        System.out.println("Enter the patient Id");
-        str = scanner.nextLine();
-
-
-        if(str.isBlank()) {
-            System.out.println("Patient Id is blank");
-            return null;
-        }
-        else {
-            // here to get the patient and validate it
-            System.out.println("Patient Id : " + str);
-            Patient a = new Patient(str);
-            appointment.setPatient(a);
-        }
         scanner.close();
         return appointment;
 
@@ -140,6 +180,9 @@ public class Receptionist {
                     System.out.println("Invalid appointment status");
                     break;
             }
+        }
+        else {
+            System.out.println("No appointments found");
         }
         scanner.close();
 

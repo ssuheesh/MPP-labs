@@ -162,4 +162,14 @@ public class DoctorScheduleDAO implements Dao {
             throw new RuntimeException(e);
         }
     }
+    public List<DoctorSchedule> retrieveAllDoctorSchedule() {
+        try {
+            DataAccess dataAccess = DataAccessFactory.getDataAccess();
+            this.setSql("SELECT * from DOCTORSCHEDULE");
+            dataAccess.read(this);
+            return allDoctorSchedules.stream().collect(Collectors.toList());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

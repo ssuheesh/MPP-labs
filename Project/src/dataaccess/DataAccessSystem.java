@@ -21,7 +21,7 @@ public class DataAccessSystem implements DataAccess {
 
 			Statement stmt = con.createStatement();
 
-			System.out.println("the query: "+ query);
+			//System.out.println("the query: "+ query);
 			ResultSet rs = stmt.executeQuery(query);
 			dao.unpackResultSet(rs);
 		} finally {
@@ -130,7 +130,7 @@ public class DataAccessSystem implements DataAccess {
 	                // Create a connection to the database
 //	                conn = DriverManager.getConnection(dburl);
 					Connection conn = DriverManager.getConnection(dburl);
-	                System.out.println("Connection to SQLite has been established.");
+					//System.out.println("Connection to SQLite has been established.");
 					return conn;
 
 	            } else {

@@ -2,6 +2,7 @@ package business;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -106,6 +107,15 @@ public class Patient {
     }
     public static boolean addPatient(Patient patient) {
         return dao.addPatient(patient);
+    }
+    public static List<Patient> viewAllPatients() {
+        return dao.viewAllPatient();
+    }
+    public static Patient getPatientById(String patientId) {
+        return dao.getPatientById(patientId);
+    }
+    public static boolean updatePatient(Patient patient) {
+        return dao.updatePatient(patient);
     }
 
     @Override

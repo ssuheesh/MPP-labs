@@ -16,6 +16,7 @@ public class Appointment {
     private String visitReason;
     private AppointmentStatus status;
     private Patient patient;
+    private DoctorSchedule doctorSchedule;
 
     public Appointment() {
 
@@ -40,7 +41,8 @@ public class Appointment {
         this.status = status;
 
     }
-    public Appointment(Integer appointmentId, LocalDate date, Integer slotOfTheDay, String visitReason, AppointmentStatus status,Patient patient) {
+
+    public Appointment(Integer appointmentId, LocalDate date, Integer slotOfTheDay, String visitReason, AppointmentStatus status, Patient patient) {
         this.appointmentId = appointmentId;
         this.date = date;
         this.slotOfTheDay = slotOfTheDay;
@@ -84,6 +86,10 @@ public class Appointment {
         return patient;
     }
 
+    public DoctorSchedule getDoctorSchedule() {
+        return doctorSchedule;
+    }
+
     public void setAppointmentId(Integer appointmentId) {
         this.appointmentId = appointmentId;
     }
@@ -107,6 +113,11 @@ public class Appointment {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
+
+    public void setDoctorSchedule(DoctorSchedule doctorSchedule) {
+        this.doctorSchedule = doctorSchedule;
+    }
+
     public static List<Appointment> viewAllAppointment() {
 
         return dao.viewAllAppointment().stream()

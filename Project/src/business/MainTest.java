@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.time.LocalDate;
 import java.util.Scanner;
+
 import Enum.Role;
 import Tasks.AdminTask;
 
@@ -88,13 +89,23 @@ public class MainTest {
                 Receptionist.bookAppointment(Receptionist.askAppointment());
                 break;
             case 3:
-                Receptionist.viewAppointment().forEach(System.out::println);
+                List<Appointment> appointmentList = Receptionist.viewAppointment();
+                if (!appointmentList.isEmpty()) {
+                    appointmentList.forEach(System.out::println);
+                } else {
+                    System.out.println("No appointments found");
+                }
                 break;
             case 4:
                 Receptionist.updateAppointment();
                 break;
             case 5:
-                Receptionist.viewAppointmentByPatient().forEach(System.out::println);
+                List<Appointment> appointmentListByPatient = Receptionist.viewAppointmentByPatient();
+                if (!appointmentListByPatient.isEmpty()) {
+                    appointmentListByPatient.forEach(System.out::println);
+                } else {
+                    System.out.println("No appointments found");
+                }
             default:
                 break;
         }
