@@ -9,7 +9,7 @@ public class Patient {
     public Patient(String patientId) {
         this.patientId=patientId;
     }
-
+    static PatientDAO dao = new PatientDAO();
     public static enum GenderType {FEMALE, MALE};
     private String patientId;
     private String patientFirstName;
@@ -22,6 +22,16 @@ public class Patient {
     private List<Appointment> appointmentList;
     public Patient(String patientId, String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, GenderType gender, String address) {
         this.patientId = patientId;
+        this.patientFirstName = patientFirstName;
+        this.patientLastName = patientLastName;
+        this.contactNumber = contactNumber;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.patientHistoryList = new ArrayList<>();
+        this.appointmentList = new ArrayList<>();
+        this.address = address;
+    }
+    public Patient(String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, GenderType gender, String address) {
         this.patientFirstName = patientFirstName;
         this.patientLastName = patientLastName;
         this.contactNumber = contactNumber;
@@ -93,6 +103,9 @@ public class Patient {
 
     public void addAppointmentList(Appointment appointment) {
         appointmentList.add(appointment);
+    }
+    public static boolean addPatient(Patient patient) {
+        return dao.addPatient(patient);
     }
 
     @Override

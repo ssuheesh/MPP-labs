@@ -1,6 +1,7 @@
 package business;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import Enum.Role;
 import Enum.Specialist;
@@ -17,7 +18,7 @@ public class Doctor extends Staff{
 	}
 
 	private Specialist specialist; //Enum
-	
+	private List<DoctorSchedule> doctorScheduleList;
 	// Getter and Setter for specialist
     public Specialist getSpecialist() {
         return specialist;
