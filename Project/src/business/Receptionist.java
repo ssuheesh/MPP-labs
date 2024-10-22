@@ -1,6 +1,7 @@
 package business;
 
 import Enum.AppointmentStatus;
+import Enum.Specialist;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +27,37 @@ public class Receptionist {
     }
 
     public static void viewSchedule() {
+
+        Specialist specialist = null;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter specialist: \n" +
+                "FAMILY PHYSICIAN : 1\n" +
+                "CARDIOLOGIST : 2\n" +
+                "GASTROENTEROLOGIST :3");
+        String str = scanner.nextLine();
+        switch (str) {
+            case "1":
+                specialist = Specialist.FAMILY_PHYSICIAN;
+                break;
+            case "2":
+                specialist = Specialist.CARDIOLOGIST;
+                break;
+            case "3":
+                specialist = Specialist.GASTROENTEROLOGIST;
+                break;
+            default:
+                System.out.println("Specialist is not available");
+                break;
+
+        }
+
+        if(specialist != null){
+
+
+            //select doctor
+        }
+
+
         //return List<Schedule>
     }
 
@@ -70,7 +102,7 @@ public class Receptionist {
         String str = scanner.nextLine();
         Appointment appointment = viewAppointmentByAppointmentId(Integer.parseInt(str));
 
-        if(appointment != null) {
+        if (appointment != null) {
             System.out.println("Enter the appointment status to be updated :"
                     + "\n CHECKIN : 1"
                     + "\n CHECKOUT : 2"
