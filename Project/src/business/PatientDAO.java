@@ -17,10 +17,9 @@ public class PatientDAO implements Dao {
     private Patient currentPatient;
     private String queryString;
     private String insertUpdateQueryString;
-    private ResultSet unpackResultSet = null;
     @Override
     public String getSql() {
-        return "SELECT * FROM PATIENT";
+        return queryString;
     }
 
     public String getQueryString() {
@@ -70,13 +69,25 @@ public class PatientDAO implements Dao {
 
     @Override
     public void setParameters(PreparedStatement pstmt) throws SQLException {
-        pstmt.setString(1, currentPatient.getPatientId());
-        pstmt.setString(2, currentPatient.getPatientFirstName());
-        pstmt.setString(3, currentPatient.getPatientLastName());
-        pstmt.setString(4, currentPatient.getContactNumber());
-        pstmt.setString(5, currentPatient.getAddress());
-        pstmt.setDate(6, java.sql.Date.valueOf(currentPatient.getBirthDate()));
-        pstmt.setString(7, currentPatient.getGender().name());
+        if (pstmt.toString().toUpperCase().startsWith("INSERT")) {
+            pstmt.setString(1, currentPatient.getPatientId());
+            pstmt.setString(2, currentPatient.getPatientFirstName());
+            pstmt.setString(3, currentPatient.getPatientLastName());
+            pstmt.setString(4, currentPatient.getContactNumber());
+            pstmt.setString(5, currentPatient.getAddress());
+            pstmt.setDate(6, java.sql.Date.valueOf(currentPatient.getBirthDate()));
+            pstmt.setString(7, currentPatient.getGender().name());
+        }
+        else if (pstmt.toString().toUpperCase().startsWith("UPDATE")) {
+            pstmt.setString(1, currentPatient.getPatientFirstName());
+            pstmt.setString(2, currentPatient.getPatientLastName());
+            pstmt.setString(3, currentPatient.getContactNumber());
+            pstmt.setString(4, currentPatient.getAddress());
+            pstmt.setDate(5, java.sql.Date.valueOf(currentPatient.getBirthDate()));
+            pstmt.setString(6, currentPatient.getGender().name());
+            pstmt.setString(7, currentPatient.getPatientId());
+        }
+
     }
 
     public void addPatient(Patient patient) throws SQLException {
@@ -132,6 +143,19 @@ public class PatientDAO implements Dao {
         }
 
         return results;
+    }
+    public void updatePatient(Patient patient) throws SQLException {
+        try {
+            this.currentPatient = patient;
+            DataAccess dataAccess = DataAccessFactory.getDataAccess();
+
+            this.setInsertUpdateQueryString("UPDATE PATIENT SET firstName = ?, lastName = ?, contactNumber = ?, address = ?, birthDate = ?, gender = ? WHERE patientId = ?");
+
+            dataAccess.write(this);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 }
