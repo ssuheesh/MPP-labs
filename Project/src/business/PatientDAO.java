@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class PatientDAO implements Dao {
     private List<Patient> patients;
@@ -75,7 +76,8 @@ public class PatientDAO implements Dao {
             pstmt.setString(3, currentPatient.getPatientLastName());
             pstmt.setString(4, currentPatient.getContactNumber());
             pstmt.setString(5, currentPatient.getAddress());
-            pstmt.setDate(6, java.sql.Date.valueOf(currentPatient.getBirthDate()));
+            String formattedDate = currentPatient.getBirthDate().toString();
+            pstmt.setString(6, formattedDate);
             pstmt.setString(7, currentPatient.getGender().name());
         }
         else if (pstmt.toString().toUpperCase().startsWith("UPDATE")) {
@@ -90,16 +92,21 @@ public class PatientDAO implements Dao {
 
     }
 
-    public void addPatient(Patient patient) throws SQLException {
+    public boolean addPatient(Patient patient){
+        boolean flag = false;
         try{
             this.currentPatient = patient;
             DataAccess dataAccess = DataAccessFactory.getDataAccess();
+            String uniquePatientId = UUID.randomUUID().toString();
+            currentPatient.setPatientId(uniquePatientId);
             this.setInsertUpdateQueryString("INSERT INTO PATIENT (patientId, firstName, lastName, contactNumber, address, birthDate, gender) VALUES (?, ?, ?, ?, ?, ?, ?)");
             dataAccess.write(this);
+            flag = true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        return flag;
     }
 
     public List<Patient> viewAllPatient() {

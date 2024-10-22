@@ -67,7 +67,7 @@ public class DataAccessSystem implements DataAccess {
 				+ "	lastName text,"
 				+ "	contactNumber text,"
 				+ "	address text,"
-				+ "	birthDate date,"
+				+ "	birthDate text,"
 				+ "	gender text"
 				+ ");";
 
