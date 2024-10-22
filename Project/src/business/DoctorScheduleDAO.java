@@ -97,7 +97,10 @@ public class DoctorScheduleDAO implements Dao {
         try {
             this.doctorschedule = dc;
             this.setInsertUpdateQueryStringQueryString("" +
-                    "UPDATE DOCTORSCHEDULE SET name = ? " +
+                    "UPDATE DOCTORSCHEDULE SET availableDay = ?," +
+                    " slotNumber = ?," +
+                    " doctorId = ?, " +
+                    " appointmentId = ? " +
                     " WHERE id = ? ");
             dataAccess.write(this);
             flag = true;
@@ -115,10 +118,10 @@ public class DoctorScheduleDAO implements Dao {
 
         try {
             this.doctorschedule = dc;
-            this.setInsertUpdateQueryStringQueryString("INSERT INTO ADMIN" +
-                    "(id,name)" +
+            this.setInsertUpdateQueryStringQueryString("INSERT INTO DOCTORSCHEDULE" +
+                    "(id, availableDay, slotNumber, doctorId, appointmentId)" +
                     " VALUES " +
-                    "(?,?)");
+                    "(?,?,?,?,?)");
             dataAccess.write(this);
             flag = true;
 
@@ -130,14 +133,13 @@ public class DoctorScheduleDAO implements Dao {
         return flag;
     }
 
-    public Admin getAdminById(String id) {
-
+    public DoctorSchedule getDoctorScheduleById(String id) {
         try {
             DataAccess dataAccess = DataAccessFactory.getDataAccess();
-            this.setSql("SELECT * from ADMIN");
+            this.setSql("SELECT * from DOCTORSCHEDULE");
             dataAccess.read(this);
-            admin = allAdmins.stream().filter(admin -> admin.getId().equals(id)).findFirst().orElse(null);
-            return admin;
+            doctorschedule = allDoctorSchedules.stream().filter(dc -> dc.getId().equals(id)).findFirst().orElse(null);
+            return doctorschedule;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

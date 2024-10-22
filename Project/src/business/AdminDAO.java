@@ -1,6 +1,8 @@
 package business;
 
 import dataaccess.Dao;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessFactory;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +29,7 @@ public class AdminDAO implements Dao {
 
     @Override
     public String getSql() {
-        return "SELECT * from ADMIN";
+        return queryString;
     }
 
     public void setSql(String queryString) {

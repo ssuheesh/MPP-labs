@@ -35,6 +35,7 @@ public class DataAccessSystem implements DataAccess {
 		}
 	}
 
+
 	public void write(Dao dao) throws SQLException {
 		String insertSql = dao.getInsertSql();
 		try (Connection con = getConnection();
@@ -50,6 +51,14 @@ public class DataAccessSystem implements DataAccess {
 		var createAdminSql = "CREATE TABLE IF NOT EXISTS ADMIN ("
 				+ "	id text PRIMARY KEY,"
 				+ "	name text NOT NULL"
+				+ ");";
+
+		var createDoctorScheduleSql = "CREATE TABLE IF NOT EXISTS DOCTORSCHEDULE ("
+				+ "	id text PRIMARY KEY,"
+				+ "	availableDay text NOT NULL,"
+				+ "	slotNumber int NOT NULL,"
+				+ "	doctorId int NOT NULL,"
+				+ "	appointmentId int"
 				+ ");";
 
 		var createPatientSql = "CREATE TABLE IF NOT EXISTS PATIENT ("
@@ -79,6 +88,9 @@ public class DataAccessSystem implements DataAccess {
 			System.out.println("the query: "+ createAdminSql);
 			Boolean isSuccess = stmt.execute(createAdminSql);
 			System.out.println(isSuccess);
+
+			System.out.println("the query: "+ createDoctorScheduleSql);
+			stmt.execute(createDoctorScheduleSql);
 
 			System.out.println("The query: " + createPatientSql);
 			Boolean isPatientSuccess = stmt.execute(createPatientSql);

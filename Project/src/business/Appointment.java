@@ -52,7 +52,7 @@ public class Appointment {
 
     public Appointment(Integer appointmentId, LocalDate date, Integer slotOfTheDay, String visitReason, AppointmentStatus status, String patientId, String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, Patient.GenderType gender) {
         this(appointmentId, date, slotOfTheDay, visitReason, status);
-        patient = new Patient(patientId, patientFirstName, patientLastName, contactNumber, birthDate, gender);
+//        patient = new Patient(patientId, patientFirstName, patientLastName, contactNumber, birthDate, gender);
     }
 
     public Appointment(Patient patient) {
