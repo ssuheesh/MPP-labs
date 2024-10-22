@@ -3,14 +3,16 @@ package business;
 import Enum.AppointmentStatus;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Appointment {
     static AppointmentDao dao = new AppointmentDao();
     //public static enum AppointmentStatus {PENDING, SUCCESS, FINISHED, CANCEL};
-    private int appointmentId;
+    private Integer appointmentId;
     private LocalDate date;
-    private int slotOfTheDay;
+    private Integer slotOfTheDay;
     private String visitReason;
     private AppointmentStatus status;
     private Patient patient;
@@ -19,18 +21,18 @@ public class Appointment {
 
     }
 
-    public Appointment(int appointmentId) {
+    public Appointment(Integer appointmentId) {
         this.appointmentId = appointmentId;
     }
 
-    public Appointment(LocalDate date, int slotOfTheDay, String visitReason, AppointmentStatus status) {
+    public Appointment(LocalDate date, Integer slotOfTheDay, String visitReason, AppointmentStatus status) {
         this.date = date;
         this.slotOfTheDay = slotOfTheDay;
         this.visitReason = visitReason;
         this.status = status;
     }
 
-    public Appointment(int appointmentId, LocalDate date, int slotOfTheDay, String visitReason, AppointmentStatus status) {
+    public Appointment(Integer appointmentId, LocalDate date, Integer slotOfTheDay, String visitReason, AppointmentStatus status) {
         this.appointmentId = appointmentId;
         this.date = date;
         this.slotOfTheDay = slotOfTheDay;
@@ -38,7 +40,7 @@ public class Appointment {
         this.status = status;
     }
 
-    public Appointment(int appointmentId, LocalDate date, int slotOfTheDay, String visitReason, AppointmentStatus status, String patientId, String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, Patient.GenderType gender) {
+    public Appointment(Integer appointmentId, LocalDate date, Integer slotOfTheDay, String visitReason, AppointmentStatus status, String patientId, String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, Patient.GenderType gender) {
         this(appointmentId, date, slotOfTheDay, visitReason, status);
         patient = new Patient(patientId, patientFirstName, patientLastName, contactNumber, birthDate, gender);
     }
@@ -47,7 +49,7 @@ public class Appointment {
         this.patient = patient;
     }
 
-    public int getAppointmentId() {
+    public Integer getAppointmentId() {
         return appointmentId;
     }
 
@@ -56,7 +58,7 @@ public class Appointment {
         return date;
     }
 
-    public int getSlotOfTheDay() {
+    public Integer getSlotOfTheDay() {
         return slotOfTheDay;
     }
 
@@ -68,7 +70,11 @@ public class Appointment {
         return status;
     }
 
-    public void setAppointmentId(int appointmentId) {
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setAppointmentId(Integer appointmentId) {
         this.appointmentId = appointmentId;
     }
 
@@ -76,7 +82,7 @@ public class Appointment {
         this.status = status;
     }
 
-    public void setSlotOfTheDay(int slotOfTheDay) {
+    public void setSlotOfTheDay(Integer slotOfTheDay) {
         this.slotOfTheDay = slotOfTheDay;
     }
 
@@ -90,14 +96,21 @@ public class Appointment {
 
     public static List<Appointment> viewAllAppointment() {
 
-        return dao.viewAllAppointment();
+        return dao.viewAllAppointment().stream()
+                .filter(x -> !x.getDate().isBefore(LocalDate.now()))
+                .sorted(Comparator.comparing(Appointment::getDate))
+                .collect(Collectors.toList());
     }
 
     public static List<Appointment> viewAppointmentByPatient(String patientId) {
 
-        return dao.viewAppointmentByPatient(patientId);
+        return dao.viewAppointmentByPatient(patientId).stream()
+                .filter(x -> !x.getDate().isBefore(LocalDate.now()))
+                .sorted(Comparator.comparing(Appointment::getDate))
+                .collect(Collectors.toList());
     }
-    public static Appointment viewAppointmentByAppointmentId(int appointmentId) {
+
+    public static Appointment viewAppointmentByAppointmentId(Integer appointmentId) {
 
         return dao.viewAppointmentByAppointmentId(appointmentId);
     }

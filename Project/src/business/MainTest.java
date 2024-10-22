@@ -66,7 +66,7 @@ public class MainTest {
                 Receptionist.bookAppointment(Receptionist.askAppointment());
                 break;
             case 3:
-                Receptionist.viewAppointment();
+                Receptionist.viewAppointment().stream().forEach(System.out::println);
                 break;
             case 4:
                 Receptionist.updateAppointment();

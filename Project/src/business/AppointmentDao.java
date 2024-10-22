@@ -7,6 +7,7 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessFactory;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -15,11 +16,19 @@ import java.util.List;
 
 public class AppointmentDao implements Dao {
     private String queryString;
+    private String insertUpdateQueryString;
     private ResultSet unpackResultSet = null;
+    private List<Appointment> appointments = null;
+    private Appointment currentAppointment = null;
 
     public void setQueryString(String queryString) {
         this.queryString = queryString;
     }
+
+    public void setInsertUpdateQueryStringQueryString(String queryString) {
+        this.insertUpdateQueryString = queryString;
+    }
+
 
     public ResultSet getResultSet() {
         return unpackResultSet;
@@ -33,12 +42,45 @@ public class AppointmentDao implements Dao {
 
     @Override
     public void unpackResultSet(ResultSet rs) throws SQLException {
-        this.unpackResultSet = rs;
+        appointments = new ArrayList<>();
+
+        while (rs.next()) {
+            int appointmentId = rs.getInt("appointmentid");
+            LocalDate date = LocalDate.parse(rs.getString("date"));
+            int slotOfTheDay = rs.getInt("slotOfTheDay");
+            String visitReason = rs.getString("visitReason");
+            AppointmentStatus status = AppointmentStatus.valueOf(rs.getString("status"));
+            //patient
+            Appointment appointment = new Appointment(appointmentId, date, slotOfTheDay, visitReason, status);
+            appointments.add(appointment);
+
+        }
     }
 
     @Override
     public List<?> getResults() {
         return List.of();
+    }
+
+    @Override
+    public String getInsertSql() {
+        return insertUpdateQueryString;
+    }
+
+    @Override
+    public void setParameters(PreparedStatement pstmt) throws SQLException {
+        if(pstmt.toString().toUpperCase().startsWith("INSERT") ) {
+            pstmt.setObject(1, currentAppointment.getDate() != null ? currentAppointment.getDate() : null);
+            pstmt.setInt(2, currentAppointment.getSlotOfTheDay() != null ? currentAppointment.getSlotOfTheDay() : null);
+            pstmt.setString(3, currentAppointment.getVisitReason() != null ? currentAppointment.getVisitReason() : null);
+            pstmt.setString(4, currentAppointment.getStatus().toString() != null ? currentAppointment.getStatus().toString() : null);
+            pstmt.setString(5, currentAppointment.getPatient() != null ? currentAppointment.getPatient().getPatientId() : null);
+        }
+        if(pstmt.toString().toUpperCase().startsWith("UPDATE") ) {
+            pstmt.setString(1, currentAppointment.getStatus().toString() != null ? currentAppointment.getStatus().toString() : null);
+            pstmt.setInt(2, currentAppointment.getAppointmentId() != null ? currentAppointment.getAppointmentId() : null);
+        }
+
     }
 
     public List<Appointment> viewAllAppointment() {
@@ -51,20 +93,7 @@ public class AppointmentDao implements Dao {
             con = dataAccess.getConnection();
             this.setQueryString("SELECT * from APPOINTMENT");
             dataAccess.read(this);
-
-            while (this.unpackResultSet.next()) {
-
-                int appointmentid = unpackResultSet.getInt("appointmentid");
-                LocalDate date = LocalDate.parse(unpackResultSet.getString("date"));
-                int slotOfTheDay = unpackResultSet.getInt("slotOfTheDay");
-                String visitReason = unpackResultSet.getString("visitReason");
-                AppointmentStatus status = AppointmentStatus.valueOf(unpackResultSet.getString("status"));
-                //patient
-                Appointment a = new Appointment(appointmentid, date, slotOfTheDay, visitReason, status);
-
-                results.add(a);
-            }
-
+            results.addAll(appointments);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,19 +119,8 @@ public class AppointmentDao implements Dao {
         try {
             this.setQueryString("SELECT * from APPOINTMENT WHERE patient = " + patientId);
             dataAccess.read(this);
+            results = appointments;
 
-            while (this.unpackResultSet.next()) {
-
-                int appointmentId = unpackResultSet.getInt("appointmentId");
-                LocalDate date = LocalDate.parse(unpackResultSet.getString("date"));
-                int slotOfTheDay = unpackResultSet.getInt("slotOfTheDay");
-                String visitReason = unpackResultSet.getString("visitReason");
-                AppointmentStatus status = AppointmentStatus.valueOf(unpackResultSet.getString("status"));
-                //patient
-                Appointment a = new Appointment(appointmentId, date, slotOfTheDay, visitReason, status);
-
-                results.add(a);
-            }
         } catch (SQLException e) {
             e.printStackTrace();
 
@@ -119,17 +137,8 @@ public class AppointmentDao implements Dao {
         try {
             this.setQueryString("SELECT * from APPOINTMENT WHERE appointmentid = " + appointmentId);
             dataAccess.read(this);
+            results = appointments.getFirst();
 
-            while (this.unpackResultSet.next()) {
-
-                LocalDate date = LocalDate.parse(unpackResultSet.getString("date"));
-                int slotOfTheDay = unpackResultSet.getInt("slotOfTheDay");
-                String visitReason = unpackResultSet.getString("visitReason");
-                AppointmentStatus status = AppointmentStatus.valueOf(unpackResultSet.getString("status"));
-                //patient
-                results = new Appointment(appointmentId, date, slotOfTheDay, visitReason, status);
-
-            }
         } catch (SQLException e) {
             e.printStackTrace();
 
@@ -144,13 +153,14 @@ public class AppointmentDao implements Dao {
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
 
         try {
-            this.setQueryString("UPDATE APPOINTMENT SET status = '" + appointment.getStatus() +
-                    "' WHERE appointmentid = " + appointment.getAppointmentId());
+            this.currentAppointment=appointment;
+            this.setInsertUpdateQueryStringQueryString("UPDATE APPOINTMENT SET status = ? "+
+                    " WHERE appointmentid = ? ");
             dataAccess.write(this);
             flag = true;
 
             System.out.println("Updated the status of AppointmentId: " + appointment.getAppointmentId()
-                    +" to " + appointment.getStatus().toString());
+                    + " to " + appointment.getStatus().toString());
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -165,14 +175,11 @@ public class AppointmentDao implements Dao {
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
 
         try {
-            this.setQueryString("INSERT INTO APPOINTMENT" +
+            this.currentAppointment = appointment;
+            this.setInsertUpdateQueryStringQueryString("INSERT INTO APPOINTMENT" +
                     "(date,slotOfTheDay,visitReason,status,patient)" +
                     " VALUES " +
-                    "('" + appointment.getDate() + "'," +
-                    appointment.getSlotOfTheDay() + "," +
-                    "'" + appointment.getVisitReason() + "'," +
-                    "'" + appointment.getStatus().toString() + "'," +
-                    null + ")");
+                    "(?,?,?,?,?)");
             dataAccess.write(this);
             flag = true;
 
