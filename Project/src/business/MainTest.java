@@ -1,24 +1,40 @@
 package business;
 
-import dataaccess.DataAccess;
-import dataaccess.DataAccessFactory;
+import Enum.AppointmentStatus;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-
-import dataaccess.Dao;
+import java.time.LocalDate;
+import java.util.Scanner;
 
 public class MainTest {
+    static Scanner scanner = new Scanner(System.in);
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
+        System.out.println("Enter the Role \n Doctor:1 \n Receptionist:2 \n Admin:3");
+        int num = scanner.nextInt();
 
+        switch (num) {
+            case 1:
+                break;
+            case 2:
+                ReceptionistTask();
+                break;
+            default:
+                break;
+        }
+
+        scanner.close();
+
+/*
 		DataAccess dataAccess = DataAccessFactory.getDataAccess();
 		Dao dao = new AdminDAO();
 		PatientDAO patientDao = new PatientDAO();
 		Connection con = null;
 		try {
+			con = dataAccess.getConnection();
 			dataAccess.createTables(dao);
 			dataAccess.createTables(patientDao);
 			con = dataAccess.getConnection();
@@ -50,6 +66,31 @@ public class MainTest {
 //				}
 //			}
         }
+*/
+    }
 
-	}
+    public static void ReceptionistTask() {
+        System.out.println("Enter the option " +
+                "\n View Schedule:1 " +
+                "\n Book Appointment:2 " +
+                "\n View Appointment:3 " +
+                "\n Update Appointment:4");
+        int num = scanner.nextInt();
+        switch (num) {
+            case 1:
+                Receptionist.viewSchedule();
+                break;
+            case 2:
+                Receptionist.bookAppointment(Receptionist.askAppointment());
+                break;
+            case 3:
+                Receptionist.viewAppointment().stream().forEach(System.out::println);
+                break;
+            case 4:
+                Receptionist.updateAppointment();
+                break;
+            default:
+                break;
+        }
+    }
 }

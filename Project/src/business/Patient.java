@@ -3,8 +3,13 @@ package business;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Patient {
+    public Patient(String patientId) {
+        this.patientId=patientId;
+    }
+
     public static enum GenderType {FEMALE, MALE};
     private String patientId;
     private String patientFirstName;
@@ -80,8 +85,12 @@ public class Patient {
         patientHistoryList.add(patientHistory);
     }
     public List<Appointment> retrieveAppointmentList() {
+        appointmentList = Appointment.viewAppointmentByPatient(this.getPatientId())
+                .stream().filter(x -> x.getDate().isAfter(LocalDate.now()))
+                .collect(Collectors.toList());
         return appointmentList;
     }
+
     public void addAppointmentList(Appointment appointment) {
         appointmentList.add(appointment);
     }

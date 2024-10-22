@@ -18,9 +18,9 @@ public class DataAccessSystem implements DataAccess {
 		Connection con = null;
 		try {
 			con = (new ConnectManager()).getConnection();
-			
+
 			Statement stmt = con.createStatement();
-			
+
 			System.out.println("the query: "+ query);
 			ResultSet rs = stmt.executeQuery(query);
 			dao.unpackResultSet(rs);
@@ -91,28 +91,28 @@ public class DataAccessSystem implements DataAccess {
 		} finally {
 		}
 	}
-	
-	
+
+
 	public static class ConnectManager {
 
 		private static Connection conn = null;
 
-	    public Connection getConnection() throws SQLException {
-	        if (conn == null) {
-	            // Load properties file
-	            Properties properties = new Properties();
-	            try (InputStream input = ConnectManager.class.getClassLoader().getResourceAsStream("config.properties")) {
-	                if (input == null) {
-	                    System.out.println("Sorry, unable to find config.properties");
-	                    return null;
-	                }
-	                properties.load(input);
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	                return null;
-	            }
+		public Connection getConnection() throws SQLException {
+			if (conn == null) {
+				// Load properties file
+				Properties properties = new Properties();
+				try (InputStream input = ConnectManager.class.getClassLoader().getResourceAsStream("config.properties")) {
+					if (input == null) {
+						System.out.println("Sorry, unable to find config.properties");
+						return null;
+					}
+					properties.load(input);
+				} catch (IOException e) {
+					e.printStackTrace();
+					return null;
+				}
 
-	            String dburl = properties.getProperty("db.url");
+				String dburl = properties.getProperty("db.url");
 //				String dburl = "jdbc:sqlite:hospital.sqlite";
 	            if (dburl != null) {
 	                // Create a connection to the database
