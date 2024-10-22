@@ -2,6 +2,7 @@ package business;
 
 import dataaccess.Dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,9 +11,12 @@ import java.util.*;
 
 import Enum.Role;
 import Enum.Specialist;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessFactory;
 
 public class StaffDAO implements Dao {
-
+	private String queryString;
+	private String insertUpdateQueryString;
 	private Staff staff;
 	private List<Staff> allStaff;
 
@@ -25,6 +29,13 @@ public class StaffDAO implements Dao {
 
 	public void setStaff(Staff p) {
 		staff = p;
+	}
+
+	public void setQueryString(String queryString) {
+		this.queryString = queryString;
+	}
+	public void setInsertUpdateQueryStringQueryString(String queryString) {
+		this.insertUpdateQueryString = queryString;
 	}
 
 	@Override
@@ -70,5 +81,36 @@ public class StaffDAO implements Dao {
 	@Override
 	public void setParameters(PreparedStatement pstmt) throws SQLException {
 
+	}
+	public Staff getStaffByStaffId(int staffId) {
+		Optional<Staff> staff= viewAllStaff().stream().filter(x->x.getStaffId()==staffId).findFirst();
+        return staff.orElse(null);
+	}
+	public List<Staff> viewAllStaff() {
+		DataAccess dataAccess = DataAccessFactory.getDataAccess();
+		Connection con = null;
+		List<Staff> results = new ArrayList<>();
+
+
+		try {
+			con = dataAccess.getConnection();
+			this.setQueryString("SELECT * from Staff");
+			dataAccess.read(this);
+			results.addAll(allStaff);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					//do nothing
+				}
+			}
+		}
+
+		return results;
 	}
 }
