@@ -5,42 +5,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorSchedule {
+    private String id;
+    private Doctor doctor;
     private LocalDate availableDay;
-    private final List<Integer> availableHours;
-
-
-    public DoctorSchedule() {
-        availableHours = new ArrayList<>();
-        for(int i=8; i<18; i++) {
-            availableHours.add(i);
-        }
+    private Integer slotNumber;
+    private Appointment appointment;
+    // this doctor on 20thOctober has free time 8,9,10,13,16
+    // when appointment is set 20thOctober has free time 9,10,13,16
+    public DoctorSchedule(String id) {
+        this.id = id;
     }
 
-    public DoctorSchedule(LocalDate availableDay) {
-        this();
+    public DoctorSchedule(String id, LocalDate availableDay) {
+        this(id);
         this.availableDay = availableDay;
     }
-    public DoctorSchedule(LocalDate availableDay, List<Integer> availableHours) {
+    public DoctorSchedule(String id, LocalDate availableDay, Integer slotNumber) {
+        this.id = id;
         this.availableDay = availableDay;
-        this.availableHours = availableHours;
+        this.slotNumber = slotNumber;
     }
     public LocalDate getAvailableDay() {
         return availableDay;
     }
 
-    public List<Integer> getAvailableHours() {
-        return availableHours;
+    public boolean isAvailable() {
+        return this.appointment == null;
     }
 
-    public void addAvailableHour(int hour) {
-        availableHours.add(hour);
+    public String getId() {
+        return id;
     }
 
-    public void removeAvailableHour(int hour) {
-        availableHours.remove(hour);
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public boolean isAvailable(int hour) {
-        return availableHours.contains(hour);
+    public Integer getSlotNumber() {
+        return slotNumber;
+    }
+
+    public void setSlotNumber(Integer slotNumber) {
+        this.slotNumber = slotNumber;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+    public void setDoctor(Integer staffId){
+
     }
 }
