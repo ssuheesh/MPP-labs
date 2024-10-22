@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Appointment {
-    AppointmentDao dao = new AppointmentDao();
+    static AppointmentDao dao = new AppointmentDao();
     //public static enum AppointmentStatus {PENDING, SUCCESS, FINISHED, CANCEL};
     private int appointmentId;
     private LocalDate date;
@@ -15,33 +15,36 @@ public class Appointment {
     private AppointmentStatus status;
     private Patient patient;
 
-    public Appointment()
-    {
+    public Appointment() {
 
     }
-    public Appointment(int appointmentId)
-    {
-        this.appointmentId=appointmentId;
+
+    public Appointment(int appointmentId) {
+        this.appointmentId = appointmentId;
     }
+
     public Appointment(LocalDate date, int slotOfTheDay, String visitReason, AppointmentStatus status) {
         this.date = date;
         this.slotOfTheDay = slotOfTheDay;
         this.visitReason = visitReason;
         this.status = status;
     }
-    public Appointment(int appointmentId,LocalDate date, int slotOfTheDay, String visitReason, AppointmentStatus status) {
+
+    public Appointment(int appointmentId, LocalDate date, int slotOfTheDay, String visitReason, AppointmentStatus status) {
         this.appointmentId = appointmentId;
         this.date = date;
         this.slotOfTheDay = slotOfTheDay;
         this.visitReason = visitReason;
         this.status = status;
     }
-    public Appointment(int appointmentId,LocalDate date, int slotOfTheDay, String visitReason, AppointmentStatus status, String patientId, String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, Patient.GenderType gender) {
-        this(appointmentId,date, slotOfTheDay, visitReason, status);
+
+    public Appointment(int appointmentId, LocalDate date, int slotOfTheDay, String visitReason, AppointmentStatus status, String patientId, String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, Patient.GenderType gender) {
+        this(appointmentId, date, slotOfTheDay, visitReason, status);
         patient = new Patient(patientId, patientFirstName, patientLastName, contactNumber, birthDate, gender);
     }
+
     public Appointment(Patient patient) {
-        this.patient=patient;
+        this.patient = patient;
     }
 
     public int getAppointmentId() {
@@ -52,12 +55,15 @@ public class Appointment {
     public LocalDate getDate() {
         return date;
     }
+
     public int getSlotOfTheDay() {
         return slotOfTheDay;
     }
+
     public String getVisitReason() {
         return visitReason;
     }
+
     public AppointmentStatus getStatus() {
         return status;
     }
@@ -69,36 +75,41 @@ public class Appointment {
     public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
+
     public void setSlotOfTheDay(int slotOfTheDay) {
         this.slotOfTheDay = slotOfTheDay;
     }
+
     public void setVisitReason(String visitReason) {
         this.visitReason = visitReason;
     }
+
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public void createAppointment(){
+    public static List<Appointment> viewAllAppointment() {
 
-    }
-    public List<Appointment> viewAllAppointment(){
-
-        return   dao.viewAllAppointment();
+        return dao.viewAllAppointment();
     }
 
-    public List<Appointment> viewAppointmentByPatient(String patientId){
+    public static List<Appointment> viewAppointmentByPatient(String patientId) {
 
-        return   dao.viewAppointmentByPatient(patientId);
+        return dao.viewAppointmentByPatient(patientId);
     }
-    public void updateAppointment(AppointmentStatus status)
-    {
-        this.setStatus(status);
-        dao.updateAppointment(this);
+    public static Appointment viewAppointmentByAppointmentId(int appointmentId) {
+
+        return dao.viewAppointmentByAppointmentId(appointmentId);
     }
-    public void bookAppointment()
-    {
-        dao.bookAppointment(this);
+
+    public static boolean updateAppointment(Appointment appointment, AppointmentStatus status) {
+        appointment.setStatus(status);
+        return dao.updateAppointment(appointment);
+    }
+
+
+    public static boolean bookAppointment(Appointment appointment) {
+        return dao.bookAppointment(appointment);
     }
 
     @Override

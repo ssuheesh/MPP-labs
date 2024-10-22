@@ -3,33 +3,26 @@ package business;
 import Enum.AppointmentStatus;
 
 import java.time.LocalDate;
+import java.util.Scanner;
 
 public class MainTest {
+    static Scanner scanner = new Scanner(System.in);
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
+        System.out.println("Enter the Role \n Doctor:1 \n Receptionist:2 \n Admin:3");
+        int num = scanner.nextInt();
 
+        switch (num) {
+            case 1:
+                break;
+            case 2:
+                ReceptionistTask();
+                break;
+            default:
+                break;
+        }
 
-
-		//Patient p = new Patient("1");
-		//System.out.println("Patient Appointment");
-		//p.retrieveAppointmentList().stream().forEach(System.out::println);
-
-		Appointment a = new Appointment(1);
-		a.updateAppointment(AppointmentStatus.CHECKOUT);
-
-		Appointment b = new Appointment(
-				LocalDate.of(2024, 12, 6), // date
-				2, // slotOfTheDay
-				"Routine Checkup", // visitReason
-				AppointmentStatus.BOOKED // status
-		);
-		 b.bookAppointment();
-
-		 b.viewAppointmentByPatient("1").stream()
-				 .forEach(System.out::println);
-
-		b.viewAllAppointment().stream()
-				.forEach(System.out::println);
+        scanner.close();
 
 /*
 		DataAccess dataAccess = DataAccessFactory.getDataAccess();
@@ -56,5 +49,30 @@ public class MainTest {
 			}
         }
 */
-	}
+    }
+
+    public static void ReceptionistTask() {
+        System.out.println("Enter the option " +
+                "\n View Schedule:1 " +
+                "\n Book Appointment:2 " +
+                "\n View Appointment:3 " +
+                "\n Update Appointment:4");
+        int num = scanner.nextInt();
+        switch (num) {
+            case 1:
+                Receptionist.viewSchedule();
+                break;
+            case 2:
+                Receptionist.bookAppointment(Receptionist.askAppointment());
+                break;
+            case 3:
+                Receptionist.viewAppointment();
+                break;
+            case 4:
+                Receptionist.updateAppointment();
+                break;
+            default:
+                break;
+        }
+    }
 }

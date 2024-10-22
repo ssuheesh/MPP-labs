@@ -15,11 +15,12 @@ import java.util.List;
 
 public class AppointmentDao implements Dao {
     private String queryString;
-    private ResultSet unpackResultSet=null;
+    private ResultSet unpackResultSet = null;
 
     public void setQueryString(String queryString) {
         this.queryString = queryString;
     }
+
     public ResultSet getResultSet() {
         return unpackResultSet;
     }
@@ -32,7 +33,7 @@ public class AppointmentDao implements Dao {
 
     @Override
     public void unpackResultSet(ResultSet rs) throws SQLException {
-        this.unpackResultSet=rs;
+        this.unpackResultSet = rs;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class AppointmentDao implements Dao {
         return List.of();
     }
 
-    public List<Appointment> viewAllAppointment(){
+    public List<Appointment> viewAllAppointment() {
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
         Connection con = null;
         List<Appointment> results = new ArrayList<>();
@@ -59,23 +60,20 @@ public class AppointmentDao implements Dao {
                 String visitReason = unpackResultSet.getString("visitReason");
                 AppointmentStatus status = AppointmentStatus.valueOf(unpackResultSet.getString("status"));
                 //patient
-                Appointment a = new Appointment(appointmentid,date,slotOfTheDay,visitReason,status);
+                Appointment a = new Appointment(appointmentid, date, slotOfTheDay, visitReason, status);
 
                 results.add(a);
             }
 
 
-
-
         } catch (SQLException e) {
             e.printStackTrace();
 
-        }
-        finally {
-            if(con != null) {
+        } finally {
+            if (con != null) {
                 try {
                     con.close();
-                } catch(Exception e) {
+                } catch (Exception e) {
                     //do nothing
                 }
             }
@@ -84,7 +82,7 @@ public class AppointmentDao implements Dao {
         return results;
     }
 
-    public List<Appointment> viewAppointmentByPatient(String patientId){
+    public List<Appointment> viewAppointmentByPatient(String patientId) {
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
         List<Appointment> results = new ArrayList<>();
 
@@ -101,57 +99,89 @@ public class AppointmentDao implements Dao {
                 String visitReason = unpackResultSet.getString("visitReason");
                 AppointmentStatus status = AppointmentStatus.valueOf(unpackResultSet.getString("status"));
                 //patient
-                Appointment a = new Appointment(appointmentId,date,slotOfTheDay,visitReason,status);
+                Appointment a = new Appointment(appointmentId, date, slotOfTheDay, visitReason, status);
 
                 results.add(a);
             }
         } catch (SQLException e) {
             e.printStackTrace();
 
-        }
-        finally {
+        } finally {
         }
 
         return results;
     }
 
-    public void updateAppointment(Appointment appointment)
-    {
+    public Appointment viewAppointmentByAppointmentId(int appointmentId) {
+        DataAccess dataAccess = DataAccessFactory.getDataAccess();
+        Appointment results = null;
+
+        try {
+            this.setQueryString("SELECT * from APPOINTMENT WHERE appointmentid = " + appointmentId);
+            dataAccess.read(this);
+
+            while (this.unpackResultSet.next()) {
+
+                LocalDate date = LocalDate.parse(unpackResultSet.getString("date"));
+                int slotOfTheDay = unpackResultSet.getInt("slotOfTheDay");
+                String visitReason = unpackResultSet.getString("visitReason");
+                AppointmentStatus status = AppointmentStatus.valueOf(unpackResultSet.getString("status"));
+                //patient
+                results = new Appointment(appointmentId, date, slotOfTheDay, visitReason, status);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+        }
+
+        return results;
+    }
+
+    public boolean updateAppointment(Appointment appointment) {
+        boolean flag = false;
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
 
         try {
             this.setQueryString("UPDATE APPOINTMENT SET status = '" + appointment.getStatus() +
-                                "' WHERE appointmentid = " + appointment.getAppointmentId());
+                    "' WHERE appointmentid = " + appointment.getAppointmentId());
             dataAccess.write(this);
+            flag = true;
+
+            System.out.println("Updated the status of AppointmentId: " + appointment.getAppointmentId()
+                    +" to " + appointment.getStatus().toString());
 
         } catch (SQLException e) {
             e.printStackTrace();
 
+        } finally {
         }
-        finally {
-        }
+        return flag;
     }
-    public void bookAppointment(Appointment appointment)
-    {
+
+    public boolean bookAppointment(Appointment appointment) {
+        boolean flag = false;
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
 
         try {
-              this.setQueryString("INSERT INTO APPOINTMENT" +
+            this.setQueryString("INSERT INTO APPOINTMENT" +
                     "(date,slotOfTheDay,visitReason,status,patient)" +
                     " VALUES " +
-                    "('"+ appointment.getDate() + "'," +
-                    appointment.getSlotOfTheDay() +"," +
-                    "'" + appointment.getVisitReason() +"',"+
+                    "('" + appointment.getDate() + "'," +
+                    appointment.getSlotOfTheDay() + "," +
+                    "'" + appointment.getVisitReason() + "'," +
                     "'" + appointment.getStatus().toString() + "'," +
                     null + ")");
             dataAccess.write(this);
+            flag = true;
 
         } catch (SQLException e) {
             e.printStackTrace();
 
+        } finally {
         }
-        finally {
-        }
+        return flag;
     }
 }
 
