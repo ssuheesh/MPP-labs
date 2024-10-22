@@ -11,4 +11,5 @@ public interface Dao {
 	public List<?> getResults();
 	String getInsertSql(); // For insert operation
 	void setParameters(PreparedStatement pstmt) throws SQLException;
+
 }

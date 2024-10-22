@@ -35,6 +35,7 @@ public class DataAccessSystem implements DataAccess {
 		}
 	}
 
+
 	public void write(Dao dao) throws SQLException {
 		String insertSql = dao.getInsertSql();
 		try (Connection con = getConnection();
