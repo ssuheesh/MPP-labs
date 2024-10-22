@@ -44,15 +44,23 @@ public class DoctorScheduleDAO implements Dao {
     public void unpackResultSet(ResultSet rs) throws SQLException {
         allDoctorSchedules = new ArrayList<>();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // db 1, 10, 2024-10-22, "8,9,10,12,13"
+        StaffDAO staffDao = new StaffDAO();
+        AppointmentDao aDao = new AppointmentDao();
         while (rs.next()) {
-            allDoctorSchedules.add(
-                    new DoctorSchedule(
-                            rs.getString("id"),
-                            LocalDate.parse(rs.getString("availableDay"), format),
-                            rs.getInt("slotNumber")
-                    )
+            DoctorSchedule dc = new DoctorSchedule(
+                    rs.getString("id"),
+                    LocalDate.parse(rs.getString("availableDay"), format),
+                    rs.getInt("slotNumber")
             );
+            Staff d = staffDao.getStaffByStaffId(rs.getInt("doctorId"));
+            if(d instanceof Doctor) {
+                dc.setDoctor((Doctor) d);
+            }
+            if(rs.getInt("appointmentId") != -1) {
+                Appointment a = aDao.viewAppointmentByAppointmentId(rs.getInt("appointmentId"));
+                dc.setAppointment(a);
+            }
+            allDoctorSchedules.add(dc);
         }
     }
 
