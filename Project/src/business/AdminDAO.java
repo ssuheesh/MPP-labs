@@ -2,6 +2,7 @@ package business;
 
 import dataaccess.Dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -31,5 +32,15 @@ public class AdminDAO implements Dao {
     @Override
     public List<?> getResults() {
         return allAdmins;
+    }
+
+    @Override
+    public String getInsertSql() {
+        return "";
+    }
+
+    @Override
+    public void setParameters(PreparedStatement pstmt) throws SQLException {
+
     }
 }

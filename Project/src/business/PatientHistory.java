@@ -11,7 +11,7 @@ public class PatientHistory {
         this.visitDate = visitDate;
         this.syndrome = syndrome;
         this.prescription = prescription;
-        patient = new Patient(patientId, patientFirstName, patientLastName, contactNumber, birthDate, gender);
+//        patient = new Patient(patientId, patientFirstName, patientLastName, contactNumber, birthDate, gender);
     }
     public PatientHistory(LocalDate visitDate, String syndrome, String prescription) {
         this.visitDate = visitDate;

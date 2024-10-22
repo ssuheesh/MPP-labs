@@ -13,7 +13,7 @@ public class Appointment {
         this.date = date;
         this.slotOfTheDay = slotOfTheDay;
         this.visitReason = visitReason;
-        patient = new Patient(patientId, patientFirstName, patientLastName, contactNumber, birthDate, gender);
+//        patient = new Patient(patientId, patientFirstName, patientLastName, contactNumber, birthDate, gender);
     }
     public LocalDate getDate() {
         return date;
