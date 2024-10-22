@@ -2,6 +2,7 @@ package business;
 import Enum.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -78,6 +79,22 @@ public class Admin {
             staffDAO.createStaff(c);
             return c;
         }
+    }
+
+    public static DoctorSchedule addDoctorSchedule(Doctor doctor) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DoctorScheduleDAO dsDao = new DoctorScheduleDAO();
+        Scanner sc = new Scanner(System.in);
+        LocalDate date = LocalDate.now();
+        System.out.println("Enter availableDay: ");
+        LocalDate availableDay = LocalDate.parse(sc.nextLine(), format);
+        System.out.println("Enter slotNumber: ");
+        Integer slotNumber = Integer.parseInt(sc.nextLine());
+        DoctorSchedule ds = new DoctorSchedule(availableDay, slotNumber);
+        ds.setDoctor(doctor);
+        dsDao.createDoctorSchedule(ds);
+        doctor.addDoctorSchedule(ds);
+        return ds;
     }
 
 }
