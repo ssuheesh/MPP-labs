@@ -3,6 +3,7 @@ package business;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DoctorSchedule {
     private String id;
@@ -12,6 +13,9 @@ public class DoctorSchedule {
     private Appointment appointment;
     // this doctor on 20thOctober has free time 8,9,10,13,16
     // when appointment is set 20thOctober has free time 9,10,13,16
+    public DoctorSchedule(){
+        this.id = UUID.randomUUID().toString();
+    }
     public DoctorSchedule(String id) {
         this.id = id;
     }
@@ -20,11 +24,21 @@ public class DoctorSchedule {
         this(id);
         this.availableDay = availableDay;
     }
+    public DoctorSchedule( LocalDate availableDay) {
+        this();
+        this.availableDay = availableDay;
+    }
     public DoctorSchedule(String id, LocalDate availableDay, Integer slotNumber) {
         this.id = id;
         this.availableDay = availableDay;
         this.slotNumber = slotNumber;
     }
+    public DoctorSchedule( LocalDate availableDay, Integer slotNumber) {
+        this();
+        this.availableDay = availableDay;
+        this.slotNumber = slotNumber;
+    }
+
     public LocalDate getAvailableDay() {
         return availableDay;
     }
