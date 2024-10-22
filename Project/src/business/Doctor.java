@@ -1,9 +1,13 @@
 package business;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 import Enum.Role;
 import Enum.Specialist;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessFactory;
 
 public class Doctor extends Staff{
 	public Doctor(String name, Role role, LocalDate joinDate, String contactNumber,Specialist specialist) {
@@ -17,7 +21,7 @@ public class Doctor extends Staff{
 	}
 
 	private Specialist specialist; //Enum
-	
+	private List<DoctorSchedule> doctorScheduleList;
 	// Getter and Setter for specialist
     public Specialist getSpecialist() {
         return specialist;
@@ -26,4 +30,14 @@ public class Doctor extends Staff{
     public void setSpecialist(Specialist specialist) {
         this.specialist = specialist;
     }
+
+	public List<DoctorSchedule> getDoctorScheduleList() {
+		return doctorScheduleList;
+	}
+	public List<DoctorSchedule> getDoctorScheduleById(int doctorId) {
+		DataAccess dataAccess = DataAccessFactory.getDataAccess();
+		DoctorScheduleDAO doctorScheduleDAO=new DoctorScheduleDAO();
+		this.doctorScheduleList.addAll(doctorScheduleDAO.getDoctorScheduleByDoctorId(String.valueOf(doctorId)));
+		return this.doctorScheduleList;
+	}
 }
