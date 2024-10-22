@@ -3,6 +3,8 @@ package business;
 import dataaccess.Dao;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFactory;
+
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,10 +15,30 @@ import java.util.List;
 public class PatientDAO implements Dao {
     private List<Patient> patients;
     private Patient currentPatient;
+    private String queryString;
+    private String insertUpdateQueryString;
+    private ResultSet unpackResultSet = null;
     @Override
     public String getSql() {
         return "SELECT * FROM PATIENT";
     }
+
+    public String getQueryString() {
+        return queryString;
+    }
+
+    public String getInsertUpdateQueryString() {
+        return insertUpdateQueryString;
+    }
+
+    public void setQueryString(String queryString) {
+        this.queryString = queryString;
+    }
+    public void setInsertUpdateQueryString(String insertUpdateQueryString) {
+        this.insertUpdateQueryString = insertUpdateQueryString;
+    }
+
+
 
     @Override
     public void unpackResultSet(ResultSet rs) throws SQLException {
@@ -43,7 +65,7 @@ public class PatientDAO implements Dao {
 
     @Override
     public String getInsertSql() {
-        return "INSERT INTO PATIENT (patientId, firstName, lastName, contactNumber, address, birthDate, gender) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        return insertUpdateQueryString;
     }
 
     @Override
@@ -57,9 +79,59 @@ public class PatientDAO implements Dao {
         pstmt.setString(7, currentPatient.getGender().name());
     }
 
-public void addPatient(Patient patient) throws SQLException {
-    this.currentPatient = patient;
-    DataAccess dataAccess = DataAccessFactory.getDataAccess();
-    dataAccess.write(this);
-}
+    public void addPatient(Patient patient) throws SQLException {
+        try{
+            this.currentPatient = patient;
+            DataAccess dataAccess = DataAccessFactory.getDataAccess();
+            this.setInsertUpdateQueryString("INSERT INTO PATIENT (patientId, firstName, lastName, contactNumber, address, birthDate, gender) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            dataAccess.write(this);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public List<Patient> viewAllPatient() {
+        DataAccess dataAccess = DataAccessFactory.getDataAccess();
+        Connection con = null;
+        List<Patient> results = new ArrayList<>();
+
+        try {
+            con = dataAccess.getConnection();
+            this.setQueryString("SELECT * from PATIENT");
+            dataAccess.read(this);
+            results.addAll(patients);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (Exception e) {
+                    //do nothing
+                }
+            }
+        }
+
+        return results;
+    }
+    public Patient getPatientById(int patientId) {
+        DataAccess dataAccess = DataAccessFactory.getDataAccess();
+        Patient results = null;
+
+        try {
+            this.setQueryString("SELECT * from PATIENT WHERE patientId = " + patientId);
+            dataAccess.read(this);
+            results = patients.getFirst();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+
+        return results;
+    }
+
 }
