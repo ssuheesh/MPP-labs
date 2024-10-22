@@ -45,7 +45,7 @@ public class StaffDAO implements Dao {
 			String specialistStr = rs.getString("specialist");
 
 		
-			if (specialistStr != null && !specialistStr.isEmpty()) {
+			if (role == Role.DOCTOR && specialistStr != null && !specialistStr.isEmpty()) {
 				Specialist specialist = Specialist.valueOf(specialistStr);
 				Doctor doctor = new Doctor(staffId,name, role, joinDate, contactNumber, specialist);
 				staff = doctor;
