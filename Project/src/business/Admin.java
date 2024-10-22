@@ -2,6 +2,7 @@ package business;
 import Enum.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -71,10 +72,29 @@ public class Admin {
                 s = Specialist.GASTROENTEROLOGIST;
             }
             Doctor d = new Doctor(name, role, date, contactNumber, s);
+            staffDAO.createStaff(d);
             return d;
         } else {
-            return new Staff(name, role, date, contactNumber);
+            Staff c = new Staff(name, role, date, contactNumber);
+            staffDAO.createStaff(c);
+            return c;
         }
+    }
+
+    public static DoctorSchedule addDoctorSchedule(Doctor doctor) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DoctorScheduleDAO dsDao = new DoctorScheduleDAO();
+        Scanner sc = new Scanner(System.in);
+        LocalDate date = LocalDate.now();
+        System.out.println("Enter availableDay: ");
+        LocalDate availableDay = LocalDate.parse(sc.nextLine(), format);
+        System.out.println("Enter slotNumber: ");
+        Integer slotNumber = Integer.parseInt(sc.nextLine());
+        DoctorSchedule ds = new DoctorSchedule(availableDay, slotNumber);
+        ds.setDoctor(doctor);
+        dsDao.createDoctorSchedule(ds);
+        doctor.addDoctorSchedule(ds);
+        return ds;
     }
 
 }

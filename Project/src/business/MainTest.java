@@ -11,11 +11,23 @@ import java.util.Scanner;
 
 import Enum.Role;
 import Tasks.AdminTask;
+import dataaccess.Dao;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessFactory;
 
 public class MainTest {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        try {
+            DataAccess dataAccess = DataAccessFactory.getDataAccess();
+            Dao dao = new AdminDAO();
+            Connection con = null;
+            con = dataAccess.getConnection();
+            dataAccess.createTables(dao);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
         System.out.println("Enter the Role \n Doctor:1 \n Receptionist:2 \n Admin:3");
         int num = scanner.nextInt();
 
@@ -74,6 +86,7 @@ public class MainTest {
     }
 
     public static void ReceptionistTask() {
+
         System.out.println("Enter the option " +
                 "\n View Schedule:1 " +
                 "\n Book Appointment:2 " +
