@@ -144,7 +144,8 @@ public class AppointmentDao implements Dao {
         try {
             this.setQueryString("SELECT * from APPOINTMENT WHERE appointmentid = '" + appointmentId + "'");
             dataAccess.read(this);
-            results = appointments.getFirst();
+            if (appointments != null && appointments.size() > 0)
+                results = appointments.getFirst();
 
         } catch (SQLException e) {
             e.printStackTrace();

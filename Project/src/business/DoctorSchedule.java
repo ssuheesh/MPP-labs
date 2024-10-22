@@ -75,4 +75,15 @@ public class DoctorSchedule {
     public void setAppointment(Appointment appointment) {
         this.appointment = appointment;
     }
+
+    @Override
+    public String toString() {
+        return "DoctorSchedule{" +
+                "id='" + id + '\'' +
+                ", availableDay=" + availableDay +
+                ", slotNumber=" + slotNumber +
+                ", doctor=" + doctor.getName() +
+                ", specialist = " + doctor.getSpecialist() +
+                "}";
+    }
 }

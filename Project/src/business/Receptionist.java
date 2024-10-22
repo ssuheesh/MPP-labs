@@ -5,12 +5,13 @@ import Enum.Specialist;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Receptionist {
 
     public static boolean bookAppointment(Appointment appointment) {
         /*Schedule Appointment */
-        if(appointment!=null) {
+        if (appointment != null) {
             if (Appointment.bookAppointment(appointment)) {
                 Optional<Appointment> insertedAppointment = Appointment.viewAllAppointment().stream().sorted(Comparator.comparing(Appointment::getAppointmentId).reversed()).findFirst();
                 if (insertedAppointment.isPresent()) {
@@ -70,10 +71,18 @@ public class Receptionist {
         if (specialist != null) {
 
             //get all doctors by specialist
+            DoctorScheduleDAO doctorScheduleDAO = new DoctorScheduleDAO();
+            Specialist finalSpecialist = specialist;
 
-            //get all schedules by doctor
-
-
+            System.out.println("Available schedule for " + specialist.toString() + " are here.");
+            doctorScheduleDAO.retrieveAllDoctorSchedule().stream()
+                     .filter(x -> x.getDoctor().getSpecialist().equals(finalSpecialist))
+                    .filter(x -> !x.getAvailableDay().isBefore(LocalDate.now()))
+                    //.filter(x -> x.getAppointment() == null)
+                    .sorted(Comparator.comparing(DoctorSchedule::getAvailableDay)
+                            .thenComparing(DoctorSchedule::getSlotNumber)
+                            .thenComparing(DoctorSchedule::getSlotNumber))
+                    .forEach(System.out::println);
         }
 
         scanner.close();
@@ -122,12 +131,11 @@ public class Receptionist {
             DoctorScheduleDAO doctorScheduleDAO = new DoctorScheduleDAO();
             DoctorSchedule doctorSchedule = doctorScheduleDAO.getDoctorScheduleById(str);
             if (doctorSchedule != null) {
-                if(doctorSchedule.isAvailable()) {
+                if (doctorSchedule.isAvailable()) {
                     appointment.setDoctorSchedule(doctorSchedule);
                     appointment.setDate(doctorSchedule.getAvailableDay());
                     appointment.setSlotOfTheDay(doctorSchedule.getSlotNumber());
-                }
-                else{
+                } else {
                     System.out.println("The slot is not available.");
                     return null;
                 }
@@ -172,6 +180,9 @@ public class Receptionist {
                     System.out.println("Invalid appointment status");
                     break;
             }
+        }
+        else {
+            System.out.println("No appointments found");
         }
         scanner.close();
 
