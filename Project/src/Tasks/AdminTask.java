@@ -14,7 +14,8 @@ public class AdminTask {
                 "\n Manage Staff Info: 1 " +
                 "\n Manage Staff Schedule: 2 " +
                 "\n View Appointments: 3 " +
-                "\n View Patient Records: 4 "  );
+                "\n View Patient Records: 4 " +
+                " \n Exit: 9"  );
         int num = scanner.nextInt();
         switch (num) {
             case 1:
@@ -29,9 +30,12 @@ public class AdminTask {
             case 4:
                 Receptionist.viewAppointment().forEach(System.out::println);
                 break;
+            case 9:
+                System.exit(0);
             default:
                 break;
         }
+        adminStaffTask();
     }
 
 

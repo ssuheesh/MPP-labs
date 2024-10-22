@@ -75,19 +75,19 @@ public class StaffDAO implements Dao {
 
 	@Override
 	public String getInsertSql() {
-		return "";
+		return this.insertUpdateQueryString;
 	}
 
 	@Override
 	public void setParameters(PreparedStatement pstmt) throws SQLException {
 		if (pstmt.toString().toUpperCase().startsWith("INSERT")) {
-			pstmt.setInt(1, staff.getStaffId() != null ? staff.getStaffId(): null);
-			pstmt.setString(2, staff.getName() != null ? staff.getName() : null);
-			pstmt.setString(3,staff.getRole() != null ? staff.getRole().toString() : null);
-			pstmt.setString(4, staff.getJoinDate() != null ? staff.getJoinDate().toString() : null);
-			pstmt.setString(5, staff.getContactNumber() != null  ? staff.getContactNumber() : null);
+//			pstmt.setInt(1, staff.getStaffId() != null ? staff.getStaffId(): null);
+			pstmt.setString(1, staff.getName() != null ? staff.getName() : null);
+			pstmt.setString(2,staff.getRole() != null ? staff.getRole().toString() : null);
+			pstmt.setString(3, staff.getJoinDate() != null ? staff.getJoinDate().toString() : null);
+			pstmt.setString(4, staff.getContactNumber() != null  ? staff.getContactNumber() : null);
 			if(staff instanceof Doctor) {
-			pstmt.setString(6, ((Doctor) staff).getSpecialist() != null ? ((Doctor) staff).getSpecialist().toString() : null);
+			pstmt.setString(5, ((Doctor) staff).getSpecialist() != null ? ((Doctor) staff).getSpecialist().toString() : null);
 		}}
 	}
 	public Staff getStaffByStaffId(int staffId) {
@@ -132,15 +132,15 @@ public class StaffDAO implements Dao {
 			if(staff instanceof Doctor) {
 
 				this.setInsertUpdateQueryStringQueryString("INSERT INTO STAFF" +
-						"(staffId,name,role,joinDate,contactNumber,specialist)" +
+						"(name,role,joinDate,contactNumber,specialist)" +
 						" VALUES " +
-						"(?,?,?,?,?,?)");
+						"(?,?,?,?,?)");
 			}
 			else if(staff instanceof Staff) {
 				this.setInsertUpdateQueryStringQueryString("INSERT INTO STAFF" +
-						"(staffId,name,role,joinDate,contactNumber)" +
+						"(name,role,joinDate,contactNumber)" +
 						" VALUES " +
-						"(?,?,?,?,?)");
+						"(?,?,?,?)");
 			}
 			dataAccess.write(this);
 			flag = true;

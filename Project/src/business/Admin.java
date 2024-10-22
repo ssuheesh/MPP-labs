@@ -71,9 +71,12 @@ public class Admin {
                 s = Specialist.GASTROENTEROLOGIST;
             }
             Doctor d = new Doctor(name, role, date, contactNumber, s);
+            staffDAO.createStaff(d);
             return d;
         } else {
-            return new Staff(name, role, date, contactNumber);
+            Staff c = new Staff(name, role, date, contactNumber);
+            staffDAO.createStaff(c);
+            return c;
         }
     }
 
