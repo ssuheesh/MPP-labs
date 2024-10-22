@@ -86,12 +86,10 @@ public class AppointmentDao implements Dao {
 
     public List<Appointment> viewAppointmentByPatient(String patientId){
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
-        Connection con = null;
         List<Appointment> results = new ArrayList<>();
 
 
         try {
-            con = dataAccess.getConnection();
             this.setQueryString("SELECT * from APPOINTMENT WHERE patient = " + patientId);
             dataAccess.read(this);
 
@@ -112,13 +110,6 @@ public class AppointmentDao implements Dao {
 
         }
         finally {
-            if(con != null) {
-                try {
-                    con.close();
-                } catch(Exception e) {
-                    //do nothing
-                }
-            }
         }
 
         return results;
@@ -127,10 +118,8 @@ public class AppointmentDao implements Dao {
     public void updateAppointment(Appointment appointment)
     {
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
-        Connection con = null;
 
         try {
-            con = dataAccess.getConnection();
             this.setQueryString("UPDATE APPOINTMENT SET status = '" + appointment.getStatus() +
                                 "' WHERE appointmentid = " + appointment.getAppointmentId());
             dataAccess.write(this);
@@ -140,13 +129,28 @@ public class AppointmentDao implements Dao {
 
         }
         finally {
-            if(con != null) {
-                try {
-                    con.close();
-                } catch(Exception e) {
-                    //do nothing
-                }
-            }
+        }
+    }
+    public void bookAppointment(Appointment appointment)
+    {
+        DataAccess dataAccess = DataAccessFactory.getDataAccess();
+
+        try {
+              this.setQueryString("INSERT INTO APPOINTMENT" +
+                    "(date,slotOfTheDay,visitReason,status,patient)" +
+                    " VALUES " +
+                    "('"+ appointment.getDate() + "'," +
+                    appointment.getSlotOfTheDay() +"," +
+                    "'" + appointment.getVisitReason() +"',"+
+                    "'" + appointment.getStatus().toString() + "'," +
+                    null + ")");
+            dataAccess.write(this);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        finally {
         }
     }
 }

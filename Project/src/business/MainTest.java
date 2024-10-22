@@ -1,20 +1,35 @@
 package business;
+
 import Enum.AppointmentStatus;
+
+import java.time.LocalDate;
+
 public class MainTest {
 
 	public static void main(String[] args) {
 
-		//Appointment a = new Appointment();
-		//a.viewAppointmentByPatient("1").stream()
-		//.forEach(System.out::println);
 
 
 		//Patient p = new Patient("1");
 		//System.out.println("Patient Appointment");
 		//p.retrieveAppointmentList().stream().forEach(System.out::println);
 
-		Appointment a = new Appointment(2);
-		a.updateAppointment(AppointmentStatus.CANCEL);
+		Appointment a = new Appointment(1);
+		a.updateAppointment(AppointmentStatus.CHECKOUT);
+
+		Appointment b = new Appointment(
+				LocalDate.of(2024, 12, 6), // date
+				2, // slotOfTheDay
+				"Routine Checkup", // visitReason
+				AppointmentStatus.BOOKED // status
+		);
+		 b.bookAppointment();
+
+		 b.viewAppointmentByPatient("1").stream()
+				 .forEach(System.out::println);
+
+		b.viewAllAppointment().stream()
+				.forEach(System.out::println);
 
 /*
 		DataAccess dataAccess = DataAccessFactory.getDataAccess();

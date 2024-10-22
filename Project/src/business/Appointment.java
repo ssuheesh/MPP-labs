@@ -23,6 +23,12 @@ public class Appointment {
     {
         this.appointmentId=appointmentId;
     }
+    public Appointment(LocalDate date, int slotOfTheDay, String visitReason, AppointmentStatus status) {
+        this.date = date;
+        this.slotOfTheDay = slotOfTheDay;
+        this.visitReason = visitReason;
+        this.status = status;
+    }
     public Appointment(int appointmentId,LocalDate date, int slotOfTheDay, String visitReason, AppointmentStatus status) {
         this.appointmentId = appointmentId;
         this.date = date;
@@ -89,6 +95,10 @@ public class Appointment {
     {
         this.setStatus(status);
         dao.updateAppointment(this);
+    }
+    public void bookAppointment()
+    {
+        dao.bookAppointment(this);
     }
 
     @Override

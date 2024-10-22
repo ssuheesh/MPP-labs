@@ -1,8 +1,8 @@
 package Enum;
 
 public enum AppointmentStatus {
-    PENDING,
-    SUCCESS,
-    FINISHED,
-    CANCEL
+    BOOKED, //New appointment
+    CHECKIN, //Check in
+    CHECKOUT,//Check out
+    CANCEL //Cancel appointment
 }
