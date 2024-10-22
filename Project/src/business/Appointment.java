@@ -38,7 +38,17 @@ public class Appointment {
         this.slotOfTheDay = slotOfTheDay;
         this.visitReason = visitReason;
         this.status = status;
+
     }
+    public Appointment(Integer appointmentId, LocalDate date, Integer slotOfTheDay, String visitReason, AppointmentStatus status,Patient patient) {
+        this.appointmentId = appointmentId;
+        this.date = date;
+        this.slotOfTheDay = slotOfTheDay;
+        this.visitReason = visitReason;
+        this.status = status;
+        this.patient = patient;
+    }
+
 
     public Appointment(Integer appointmentId, LocalDate date, Integer slotOfTheDay, String visitReason, AppointmentStatus status, String patientId, String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, Patient.GenderType gender) {
         this(appointmentId, date, slotOfTheDay, visitReason, status);
@@ -94,6 +104,9 @@ public class Appointment {
         this.date = date;
     }
 
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
     public static List<Appointment> viewAllAppointment() {
 
         return dao.viewAllAppointment().stream()
@@ -133,8 +146,8 @@ public class Appointment {
                 ", slotOfTheDay=" + slotOfTheDay +
                 ", visitReason='" + visitReason + '\'' +
                 ", status=" + status +
-                ", patient=" + patient +
-                '}';
+                ", patient=" + patient.getPatientId() +
+                "}";
     }
 }
 

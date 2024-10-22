@@ -74,7 +74,8 @@ public class MainTest {
                 "\n View Schedule:1 " +
                 "\n Book Appointment:2 " +
                 "\n View Appointment:3 " +
-                "\n Update Appointment:4");
+                "\n Update Appointment:4" +
+                "\n View Appointment by patientId:5");
         int num = scanner.nextInt();
         switch (num) {
             case 1:
@@ -84,11 +85,13 @@ public class MainTest {
                 Receptionist.bookAppointment(Receptionist.askAppointment());
                 break;
             case 3:
-                Receptionist.viewAppointment().stream().forEach(System.out::println);
+                Receptionist.viewAppointment().forEach(System.out::println);
                 break;
             case 4:
                 Receptionist.updateAppointment();
                 break;
+            case 5:
+                Receptionist.viewAppointmentByPatient().forEach(System.out::println);
             default:
                 break;
         }
