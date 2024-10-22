@@ -43,14 +43,14 @@ public class PatientDAO implements Dao {
     @Override
     public void unpackResultSet(ResultSet rs) throws SQLException {
         patients = new ArrayList<>();
-
         while (rs.next()) {
             String patientId = rs.getString("patientId");
             String firstName = rs.getString("firstName");
             String lastName = rs.getString("lastName");
             String contactNumber = rs.getString("contactNumber");
             String address = rs.getString("address");
-            LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
+            String birthDateString = rs.getString("birthDate");
+            LocalDate birthDate = (birthDateString != null) ? LocalDate.parse(birthDateString) : null;
             Patient.GenderType gender = Patient.GenderType.valueOf(rs.getString("gender").toUpperCase());
 
             Patient patient = new Patient(patientId, firstName, lastName, contactNumber, birthDate, gender, address);
@@ -135,12 +135,12 @@ public class PatientDAO implements Dao {
 
         return results;
     }
-    public Patient getPatientById(int patientId) {
+    public Patient getPatientById(String patientId) {
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
         Patient results = null;
 
         try {
-            this.setQueryString("SELECT * from PATIENT WHERE patientId = " + patientId);
+            this.setQueryString("SELECT * FROM PATIENT WHERE patientId = '" + patientId + "'");
             dataAccess.read(this);
             results = patients.getFirst();
 
@@ -151,7 +151,8 @@ public class PatientDAO implements Dao {
 
         return results;
     }
-    public void updatePatient(Patient patient) throws SQLException {
+    public boolean updatePatient(Patient patient) {
+        boolean flag = false;
         try {
             this.currentPatient = patient;
             DataAccess dataAccess = DataAccessFactory.getDataAccess();
@@ -159,10 +160,11 @@ public class PatientDAO implements Dao {
             this.setInsertUpdateQueryString("UPDATE PATIENT SET firstName = ?, lastName = ?, contactNumber = ?, address = ?, birthDate = ?, gender = ? WHERE patientId = ?");
 
             dataAccess.write(this);
+            flag = true;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e;
         }
+        return flag;
     }
 
 }
