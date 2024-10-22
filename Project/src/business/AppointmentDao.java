@@ -45,13 +45,16 @@ public class AppointmentDao implements Dao {
         appointments = new ArrayList<>();
 
         while (rs.next()) {
-            int appointmentId = rs.getInt("appointmentid");
+            Integer appointmentId = rs.getInt("appointmentid");
             LocalDate date = LocalDate.parse(rs.getString("date"));
-            int slotOfTheDay = rs.getInt("slotOfTheDay");
+            Integer slotOfTheDay = rs.getInt("slotOfTheDay");
             String visitReason = rs.getString("visitReason");
             AppointmentStatus status = AppointmentStatus.valueOf(rs.getString("status"));
-            //patient
-            Appointment appointment = new Appointment(appointmentId, date, slotOfTheDay, visitReason, status);
+            //here to get patient
+            String patientId = rs.getString("patient");
+            Patient patient = new Patient(patientId);
+
+            Appointment appointment = new Appointment(appointmentId, date, slotOfTheDay, visitReason, status,patient);
             appointments.add(appointment);
 
         }
@@ -69,14 +72,14 @@ public class AppointmentDao implements Dao {
 
     @Override
     public void setParameters(PreparedStatement pstmt) throws SQLException {
-        if(pstmt.toString().toUpperCase().startsWith("INSERT") ) {
+        if (pstmt.toString().toUpperCase().startsWith("INSERT")) {
             pstmt.setObject(1, currentAppointment.getDate() != null ? currentAppointment.getDate() : null);
             pstmt.setInt(2, currentAppointment.getSlotOfTheDay() != null ? currentAppointment.getSlotOfTheDay() : null);
             pstmt.setString(3, currentAppointment.getVisitReason() != null ? currentAppointment.getVisitReason() : null);
             pstmt.setString(4, currentAppointment.getStatus().toString() != null ? currentAppointment.getStatus().toString() : null);
-            pstmt.setString(5, currentAppointment.getPatient() != null ? currentAppointment.getPatient().getPatientId() : null);
+            pstmt.setString(5, currentAppointment.getPatient() != null && currentAppointment.getPatient().getPatientId() != null ? currentAppointment.getPatient().getPatientId() : null);
         }
-        if(pstmt.toString().toUpperCase().startsWith("UPDATE") ) {
+        if (pstmt.toString().toUpperCase().startsWith("UPDATE")) {
             pstmt.setString(1, currentAppointment.getStatus().toString() != null ? currentAppointment.getStatus().toString() : null);
             pstmt.setInt(2, currentAppointment.getAppointmentId() != null ? currentAppointment.getAppointmentId() : null);
         }
@@ -117,7 +120,7 @@ public class AppointmentDao implements Dao {
 
 
         try {
-            this.setQueryString("SELECT * from APPOINTMENT WHERE patient = " + patientId);
+            this.setQueryString("SELECT * from APPOINTMENT WHERE patient = '" + patientId + "'");
             dataAccess.read(this);
             results = appointments;
 
@@ -135,7 +138,7 @@ public class AppointmentDao implements Dao {
         Appointment results = null;
 
         try {
-            this.setQueryString("SELECT * from APPOINTMENT WHERE appointmentid = " + appointmentId);
+            this.setQueryString("SELECT * from APPOINTMENT WHERE appointmentid = '" + appointmentId + "'");
             dataAccess.read(this);
             results = appointments.getFirst();
 
@@ -153,8 +156,8 @@ public class AppointmentDao implements Dao {
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
 
         try {
-            this.currentAppointment=appointment;
-            this.setInsertUpdateQueryStringQueryString("UPDATE APPOINTMENT SET status = ? "+
+            this.currentAppointment = appointment;
+            this.setInsertUpdateQueryStringQueryString("UPDATE APPOINTMENT SET status = ? " +
                     " WHERE appointmentid = ? ");
             dataAccess.write(this);
             flag = true;
