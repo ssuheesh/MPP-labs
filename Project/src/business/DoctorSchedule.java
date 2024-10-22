@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorSchedule {
-    LocalDate availableDay;
-    List<Integer> availableHours;
+    private LocalDate availableDay;
+    private final List<Integer> availableHours;
 
 
     public DoctorSchedule() {
@@ -19,6 +19,10 @@ public class DoctorSchedule {
     public DoctorSchedule(LocalDate availableDay) {
         this();
         this.availableDay = availableDay;
+    }
+    public DoctorSchedule(LocalDate availableDay, List<Integer> availableHours) {
+        this.availableDay = availableDay;
+        this.availableHours = availableHours;
     }
     public LocalDate getAvailableDay() {
         return availableDay;
