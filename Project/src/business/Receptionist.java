@@ -4,6 +4,7 @@ import Enum.AppointmentStatus;
 import Enum.Specialist;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,6 +12,7 @@ public class Receptionist {
 
     public static boolean bookAppointment(Appointment appointment) {
         /*Schedule Appointment */
+
         return Appointment.bookAppointment(appointment);
     }
 
@@ -18,7 +20,11 @@ public class Receptionist {
         return Appointment.viewAllAppointment();
     }
 
-    public static List<Appointment> viewAppointmentByPatient(String patientId) {
+    public static List<Appointment> viewAppointmentByPatient() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter patientId : ");
+        String patientId = scanner.nextLine();
+        if (patientId.isEmpty() || patientId.isBlank()) return null;
         return Appointment.viewAppointmentByPatient(patientId);
     }
 
@@ -51,20 +57,19 @@ public class Receptionist {
 
         }
 
-        if(specialist != null){
+        if (specialist != null) {
+
+            //get all doctors by specialist
+
+            //get all schedules by doctor
 
 
-            //select doctor
         }
 
-
+        scanner.close();
         //return List<Schedule>
     }
 
-    public static boolean takeAppointment(Appointment appointment) {
-        //to integrate booked Appointment and Schedule
-        return false;
-    }
 
     public static boolean updateAppointment(Appointment appointment, AppointmentStatus status) {
         /*Check In/Out appointment*/
@@ -90,8 +95,21 @@ public class Receptionist {
 
         appointment.setStatus(AppointmentStatus.BOOKED);
 
-        scanner.close();
+        System.out.println("Enter the patient Id");
+        str = scanner.nextLine();
 
+
+        if(str.isBlank()) {
+            System.out.println("Patient Id is blank");
+            return null;
+        }
+        else {
+            // here to get the patient and validate it
+            System.out.println("Patient Id : " + str);
+            Patient a = new Patient(str);
+            appointment.setPatient(a);
+        }
+        scanner.close();
         return appointment;
 
     }

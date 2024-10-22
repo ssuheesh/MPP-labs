@@ -2,6 +2,7 @@ package business;
 
 import dataaccess.Dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -44,7 +45,7 @@ public class StaffDAO implements Dao {
 			String specialistStr = rs.getString("specialist");
 
 		
-			if (specialistStr != null && !specialistStr.isEmpty()) {
+			if (role == Role.DOCTOR && specialistStr != null && !specialistStr.isEmpty()) {
 				Specialist specialist = Specialist.valueOf(specialistStr);
 				Doctor doctor = new Doctor(staffId,name, role, joinDate, contactNumber, specialist);
 				staff = doctor;
@@ -59,5 +60,15 @@ public class StaffDAO implements Dao {
 	@Override
 	public List<?> getResults() {
 		return allStaff;
+	}
+
+	@Override
+	public String getInsertSql() {
+		return "";
+	}
+
+	@Override
+	public void setParameters(PreparedStatement pstmt) throws SQLException {
+
 	}
 }
