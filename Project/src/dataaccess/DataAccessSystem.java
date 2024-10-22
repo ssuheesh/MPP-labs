@@ -53,6 +53,14 @@ public class DataAccessSystem implements DataAccess {
 				+ "	name text NOT NULL"
 				+ ");";
 
+		var createDoctorScheduleSql = "CREATE TABLE IF NOT EXISTS DOCTORSCHEDULE ("
+				+ "	id text PRIMARY KEY,"
+				+ "	availableDay text NOT NULL,"
+				+ "	slotNumber int NOT NULL,"
+				+ "	doctorId int NOT NULL,"
+				+ "	appointmentId int"
+				+ ");";
+
 		var createPatientSql = "CREATE TABLE IF NOT EXISTS PATIENT ("
 				+ "	patientId text PRIMARY KEY,"
 				+ "	firstName text,"
@@ -80,6 +88,9 @@ public class DataAccessSystem implements DataAccess {
 			System.out.println("the query: "+ createAdminSql);
 			Boolean isSuccess = stmt.execute(createAdminSql);
 			System.out.println(isSuccess);
+
+			System.out.println("the query: "+ createDoctorScheduleSql);
+			stmt.execute(createDoctorScheduleSql);
 
 			System.out.println("The query: " + createPatientSql);
 			Boolean isPatientSuccess = stmt.execute(createPatientSql);
