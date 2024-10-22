@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.time.LocalDate;
 import java.util.Scanner;
+import Enum.Role;
+import Tasks.AdminTask;
 
 public class MainTest {
     static Scanner scanner = new Scanner(System.in);
@@ -23,6 +25,7 @@ public class MainTest {
                 ReceptionistTask();
                 break;
             default:
+                AdminTask.mainTask();
                 break;
         }
 
@@ -93,4 +96,5 @@ public class MainTest {
                 break;
         }
     }
+
 }

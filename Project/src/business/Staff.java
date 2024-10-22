@@ -1,10 +1,14 @@
 package business;
 
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import Enum.Role;
 
 public class Staff {
+    static StaffDAO dao = new StaffDAO();
 	private Integer staffId;
 	private String name;
 	private Role role; //Enum
@@ -69,7 +73,11 @@ public class Staff {
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
-    
+
+    public static List<Staff> viewAllStaff() {
+        return dao.viewAllStaff();
+    }
+
     public String toString() {
         return "Staff{" +
                 "staffId=" + staffId +
