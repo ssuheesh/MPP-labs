@@ -3,6 +3,8 @@ package business;
 import java.time.LocalDate;
 
 public class PatientHistory {
+    static PatientHistoryDAO dao = new PatientHistoryDAO();
+    private String historyID;
     private LocalDate visitDate;
     private String syndrome;
     private String prescription;
@@ -37,5 +39,23 @@ public class PatientHistory {
         this.prescription = prescription;
     }
 
+    public String getHistoryID() {
+        return historyID;
+    }
+
+    public void setHistoryID(String historyID) {
+        this.historyID = historyID;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+    public static boolean addPatientHistory(PatientHistory history, Patient patient) {
+        return dao.addHistory(history, patient);
+    }
 }
 

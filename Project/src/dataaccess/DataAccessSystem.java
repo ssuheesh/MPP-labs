@@ -72,9 +72,9 @@ public class DataAccessSystem implements DataAccess {
 				+ ");";
 
 		var createPatientHistorySql = "CREATE TABLE IF NOT EXISTS PATIENT_HISTORY ("
-				+ "	historyId INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ "	historyId text PRIMARY KEY,"
 				+ "	patientId text,"
-				+ "	visitDate date,"
+				+ "	visitDate text,"
 				+ "	syndrome text,"
 				+ "	prescription text"
 				+ ");";
