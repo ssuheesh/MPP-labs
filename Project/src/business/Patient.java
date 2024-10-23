@@ -128,8 +128,8 @@ public class Patient {
                 ", address='" + address + '\'' +
                 ", birthDate=" + birthDate +
                 ", gender=" + gender +
-                ", patientHistoryList=" + patientHistoryList +
-                ", appointmentList=" + appointmentList;
+                "\n, patientHistoryList=" + patientHistoryList +
+                "\n, appointmentList=" + appointmentList;
     }
 }
 

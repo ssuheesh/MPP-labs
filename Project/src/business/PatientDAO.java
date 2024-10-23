@@ -85,7 +85,7 @@ public class PatientDAO implements Dao {
             pstmt.setString(2, currentPatient.getPatientLastName());
             pstmt.setString(3, currentPatient.getContactNumber());
             pstmt.setString(4, currentPatient.getAddress());
-            pstmt.setDate(5, java.sql.Date.valueOf(currentPatient.getBirthDate()));
+            pstmt.setString(5, currentPatient.getBirthDate().toString());
             pstmt.setString(6, currentPatient.getGender().name());
             pstmt.setString(7, currentPatient.getPatientId());
         }
@@ -118,6 +118,16 @@ public class PatientDAO implements Dao {
             con = dataAccess.getConnection();
             this.setQueryString("SELECT * from PATIENT");
             dataAccess.read(this);
+            for (Patient patient : patients) {
+                List<PatientHistory> histories = PatientHistory.getPatientHistoryById(patient.getPatientId());
+                for(PatientHistory history : histories) {
+                    patient.addPatientHistoryList(history);
+                }
+                List<Appointment> appointments = Appointment.viewAppointmentByPatient(patient.getPatientId());
+                for(Appointment appointment : appointments) {
+                    patient.addAppointmentList(appointment);
+                }
+            }
             results.addAll(patients);
 
         } catch (SQLException e) {

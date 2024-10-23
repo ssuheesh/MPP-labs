@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import Enum.Role;
 import Tasks.AdminTask;
+import Tasks.DoctorTask;
 import Tasks.ReceptionistTask;
 import dataaccess.Dao;
 import dataaccess.DataAccess;
@@ -20,7 +21,7 @@ public class MainTest {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-       /* try {
+        try {
             DataAccess dataAccess = DataAccessFactory.getDataAccess();
             Dao dao = new AdminDAO();
             Connection con = null;
@@ -28,12 +29,13 @@ public class MainTest {
             dataAccess.createTables(dao);
         } catch(SQLException e) {
             e.printStackTrace();
-        }*/
+        }
         System.out.println("Enter the Role \n Doctor:1 \n Receptionist:2 \n Admin:3");
         String num = scanner.nextLine();
 
         switch (num) {
             case "1":
+                DoctorTask.mainTask();
                 break;
             case "2":
                 ReceptionistTask.mainTask();
