@@ -69,6 +69,8 @@ public class PatientHistoryDAO implements Dao {
     public boolean addHistory(PatientHistory history, Patient patient) {
         boolean flag = false;
         try{
+            history.setPatient(patient);
+            patient.addPatientHistoryList(history);
             this.currentPatientHistory = history;
             DataAccess dataAccess = DataAccessFactory.getDataAccess();
             String uniqueHistoryId = UUID.randomUUID().toString();
@@ -82,5 +84,20 @@ public class PatientHistoryDAO implements Dao {
         }
     return flag;
     }
+    public List<PatientHistory> getHistoryByPatientId(String patientId) {
+        DataAccess dataAccess = DataAccessFactory.getDataAccess();
+        List<PatientHistory> results = null;
 
+        try {
+            this.setQueryString("SELECT * FROM PATIENT_HISTORY WHERE patientId = '" + patientId + "'");
+            dataAccess.read(this);
+            if (patientHistoryList != null && !patientHistoryList.isEmpty())
+                results = patientHistoryList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return results;
+    }
 }

@@ -1,6 +1,7 @@
 package business;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class PatientHistory {
     static PatientHistoryDAO dao = new PatientHistoryDAO();
@@ -9,11 +10,11 @@ public class PatientHistory {
     private String syndrome;
     private String prescription;
     private Patient patient;
-    public PatientHistory(LocalDate visitDate, String syndrome, String prescription, String patientId, String patientFirstName, String patientLastName, String contactNumber, LocalDate birthDate, Patient.GenderType gender) {
+    public PatientHistory(LocalDate visitDate, String syndrome, String prescription, Patient patient) {
         this.visitDate = visitDate;
         this.syndrome = syndrome;
         this.prescription = prescription;
-//        patient = new Patient(patientId, patientFirstName, patientLastName, contactNumber, birthDate, gender);
+        this.patient = patient;
     }
     public PatientHistory(LocalDate visitDate, String syndrome, String prescription) {
         this.visitDate = visitDate;
@@ -57,5 +58,16 @@ public class PatientHistory {
     public static boolean addPatientHistory(PatientHistory history, Patient patient) {
         return dao.addHistory(history, patient);
     }
+    public static List<PatientHistory> getPatientHistoryById(String patientId) {
+        return dao.getHistoryByPatientId(patientId);
+    }
+
+    @Override
+    public String toString() {
+        return "historyId: " + historyID +
+                ", visit date: " + visitDate +
+                ", syndrome: " + syndrome +
+                ", prescription: " + prescription;
+       }
 }
 
