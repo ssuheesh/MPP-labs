@@ -29,7 +29,7 @@ public class AdminTask {
                 Receptionist.viewAppointment().forEach(System.out::println);
                 break;
             case 4:
-                Receptionist.viewAppointment().forEach(System.out::println);
+                Patient.viewAllPatients().forEach(System.out::println);
                 break;
             case 9:
                 System.exit(0);
