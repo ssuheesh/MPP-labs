@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import Enum.Role;
 import Tasks.AdminTask;
+import Tasks.ReceptionistTask;
 import dataaccess.Dao;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFactory;
@@ -19,7 +20,7 @@ public class MainTest {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        try {
+       /* try {
             DataAccess dataAccess = DataAccessFactory.getDataAccess();
             Dao dao = new AdminDAO();
             Connection con = null;
@@ -27,15 +28,15 @@ public class MainTest {
             dataAccess.createTables(dao);
         } catch(SQLException e) {
             e.printStackTrace();
-        }
+        }*/
         System.out.println("Enter the Role \n Doctor:1 \n Receptionist:2 \n Admin:3");
-        int num = scanner.nextInt();
+        String num = scanner.nextLine();
 
         switch (num) {
-            case 1:
+            case "1":
                 break;
-            case 2:
-                ReceptionistTask();
+            case "2":
+                ReceptionistTask.mainTask();
                 break;
             default:
                 AdminTask.mainTask();
@@ -85,43 +86,6 @@ public class MainTest {
 */
     }
 
-    public static void ReceptionistTask() {
 
-        System.out.println("Enter the option " +
-                "\n View Schedule:1 " +
-                "\n Book Appointment:2 " +
-                "\n View Appointment:3 " +
-                "\n Update Appointment:4" +
-                "\n View Appointment by patientId:5");
-        int num = scanner.nextInt();
-        switch (num) {
-            case 1:
-                Receptionist.viewSchedule();
-                break;
-            case 2:
-                Receptionist.bookAppointment(Receptionist.askAppointment());
-                break;
-            case 3:
-                List<Appointment> appointmentList = Receptionist.viewAppointment();
-                if (!appointmentList.isEmpty()) {
-                    appointmentList.forEach(System.out::println);
-                } else {
-                    System.out.println("No appointments found");
-                }
-                break;
-            case 4:
-                Receptionist.updateAppointment();
-                break;
-            case 5:
-                List<Appointment> appointmentListByPatient = Receptionist.viewAppointmentByPatient();
-                if (!appointmentListByPatient.isEmpty()) {
-                    appointmentListByPatient.forEach(System.out::println);
-                } else {
-                    System.out.println("No appointments found");
-                }
-            default:
-                break;
-        }
-    }
 
 }
