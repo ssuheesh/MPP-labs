@@ -17,7 +17,7 @@ public class DoctorTask {
                     "\n View Patient Records: 2 " +
                     "\n Update Patient Record: 3 " +
                     "\n Add Patient History: 4 " +
-                    "\n View All Patient History: 5 " +
+                    "\n View Patient History: 5 " +
                     "\n Exit: 9");
 
             int num = scanner.nextInt();

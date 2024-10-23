@@ -86,7 +86,7 @@ public class PatientHistoryDAO implements Dao {
     }
     public List<PatientHistory> getHistoryByPatientId(String patientId) {
         DataAccess dataAccess = DataAccessFactory.getDataAccess();
-        List<PatientHistory> results = null;
+        List<PatientHistory> results = new ArrayList<>();
 
         try {
             this.setQueryString("SELECT * FROM PATIENT_HISTORY WHERE patientId = '" + patientId + "'");
