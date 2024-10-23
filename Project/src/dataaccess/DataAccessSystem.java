@@ -79,6 +79,28 @@ public class DataAccessSystem implements DataAccess {
 				+ "	prescription text"
 				+ ");";
 
+		var createStaffSql  = "create table if not exists STAFF\n" +
+				"(\n" +
+				"    staffId       INTEGER not null\n" +
+				"        primary key autoincrement\n" +
+				"        unique,\n" +
+				"    name          TEXT,\n" +
+				"    role          TEXT,\n" +
+				"    joinDate      REAL,\n" +
+				"    contactNumber TEXT,\n" +
+				"    specialist    text\n" +
+				");\n";
+		var createAppointmentSql = "create table if not exists APPOINTMENT\n" +
+				"(\n" +
+				"    appointmentid  INTEGER\n" +
+				"        primary key autoincrement,\n" +
+				"    date           REAL,\n" +
+				"    slotOfTheDay   INTEGER,\n" +
+				"    visitReason    TEXT,\n" +
+				"    status         TEXT,\n" +
+				"    patient        TEXT,\n" +
+				"    doctorschedule text\n" +
+				");";
 		Connection con = null;
 		try {
 			con = (new ConnectManager()).getConnection();
@@ -99,7 +121,16 @@ public class DataAccessSystem implements DataAccess {
 			System.out.println("The query: " + createPatientHistorySql);
 			Boolean isPatientHistorySuccess = stmt.execute(createPatientHistorySql);
 			System.out.println("Patient table created: " + isPatientHistorySuccess);
-//			dao.unpackResultSet(rs);
+
+
+			System.out.println("The query: " + createStaffSql);
+			Boolean isStaffSuccess = stmt.execute(createStaffSql);
+			System.out.println("Staff table created: " + isStaffSuccess);
+
+
+			System.out.println("The query: " + createAppointmentSql);
+			Boolean isAppointmentSuccess = stmt.execute(createAppointmentSql);
+			System.out.println("Appointment table created: " + isAppointmentSuccess);
 		} finally {
 		}
 	}
