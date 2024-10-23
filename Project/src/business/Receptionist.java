@@ -5,7 +5,6 @@ import Enum.Specialist;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Receptionist {
 
@@ -76,16 +75,16 @@ public class Receptionist {
 
             System.out.println("Available schedule for " + specialist.toString() + " are here.");
             doctorScheduleDAO.retrieveAllDoctorSchedule().stream()
-                     .filter(x -> x.getDoctor().getSpecialist().equals(finalSpecialist))
+                    .filter(x -> x.getDoctor().getSpecialist().equals(finalSpecialist))
                     .filter(x -> !x.getAvailableDay().isBefore(LocalDate.now()))
-                    //.filter(x -> x.getAppointment() == null)
+                    .filter(x -> x.getAppointment() == null)
                     .sorted(Comparator.comparing(DoctorSchedule::getAvailableDay)
                             .thenComparing(DoctorSchedule::getSlotNumber)
                             .thenComparing(DoctorSchedule::getSlotNumber))
                     .forEach(System.out::println);
         }
 
-        scanner.close();
+        //scanner.close();
         //return List<Schedule>
     }
 
@@ -149,7 +148,7 @@ public class Receptionist {
         appointment.setVisitReason(str);
 
         appointment.setStatus(AppointmentStatus.BOOKED);
-        scanner.close();
+        //scanner.close();
         return appointment;
 
     }
@@ -180,11 +179,10 @@ public class Receptionist {
                     System.out.println("Invalid appointment status");
                     break;
             }
-        }
-        else {
+        } else {
             System.out.println("No appointments found");
         }
-        scanner.close();
+        //scanner.close();
 
     }
 }
